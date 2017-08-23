@@ -19,6 +19,7 @@
     "helmet": "^3.8.1",
     "livereactload": "next",
     "mysql": "^2.14.1",
+    "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "next",
@@ -27,6 +28,7 @@
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
     "scryfall": "^0.0.9",
+    "uuid": "^3.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.9.0"

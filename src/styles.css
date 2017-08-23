@@ -1,4 +1,15 @@
-img ***REMOVED***
-    width: 150px;
+.mana-cost ***REMOVED***
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    padding: 1px;
+***REMOVED***
+
+.card-image ***REMOVED***
+    box-shadow: 1px 1px 8px rgba(0,0,0,0.5);
+    background: url(/cardback.png) no-repeat scroll 0 0;
+    width: 250px;
     height: auto;
+    border-radius: 4.75% / 3.5%;
+    display: inline-grid;
 ***REMOVED***

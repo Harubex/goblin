@@ -20,7 +20,7 @@ gulp.task("build-client", ["build-server"], () => ***REMOVED***
     ***REMOVED***));
     bundler = watchify(bundler);
     bundler.transform(babelify);
-    bundler.plugin(lr);
+    //bundler.plugin(lr);
     bundler.on("update", () => ***REMOVED***
         compileFiles();
         let stream = bundler.bundle().on("error", console.error).pipe(source("bundle.js")).pipe(buffer());

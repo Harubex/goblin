@@ -7,7 +7,7 @@
         "**/*.js": ***REMOVED*** "when": "$(basename).ts" ***REMOVED***,
         "**/*.js.map": true,
         "node_modules": true,
-       //".gitignore": true,
+        ".gitignore": true,
         "*.db-journal": true,
         "yarn.lock": true
     ***REMOVED***,
