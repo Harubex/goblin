@@ -1,0 +1,38 @@
+***REMOVED***
+	// See http://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "0.1.0",
+	"command": "npm",
+	"isShellCommand": true,
+	"showOutput": "always",
+	"suppressTaskName": true,
+	"echoCommand": true,
+	"tasks": [
+		***REMOVED***
+			"taskName": "build",
+			"isShellCommand": true,
+			"isBackground": true,
+			"args": [
+				"build-client",
+				"--debug"
+			],
+			"options": ***REMOVED***
+				"env": ***REMOVED***
+					"NODE_ENV": "development"
+				***REMOVED***
+			***REMOVED***,
+			"command": "gulp"
+		***REMOVED***,
+		***REMOVED***
+			"taskName": "test",
+			"isShellCommand": true,
+			"isBackground": true,
+			"isTestCommand": true,
+			"args": [
+				"magical-test",
+				"--debug"
+			],
+			"command": "gulp"
+		***REMOVED***		
+	]
+***REMOVED***

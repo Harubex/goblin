@@ -1,0 +1,22 @@
+***REMOVED***
+	"version": "0.2.0",
+	"configurations": [***REMOVED***
+		"name": "Launch",
+		"type": "node",
+		"protocol": "inspector",
+		"request": "launch",
+		"program": "$***REMOVED***workspaceRoot***REMOVED***/server.js",
+		"stopOnEntry": false,
+		"args": [],
+		"cwd": "$***REMOVED***workspaceRoot***REMOVED***",
+		"preLaunchTask": null,
+		"runtimeExecutable": null,
+		"env": ***REMOVED***
+			"NODE_ENV": "development",
+			"DEBUG": "*",
+			"DEBUG_COLORS": "enabled"
+		***REMOVED***,
+		"console": "integratedTerminal",
+		"sourceMaps": false
+	***REMOVED***]
+***REMOVED***
