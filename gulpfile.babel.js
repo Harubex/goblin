@@ -20,7 +20,7 @@ gulp.task("build-client", ["build-server"], () => {
     }));
     bundler = watchify(bundler);
     bundler.transform(babelify);
-    bundler.plugin(lr);
+    //bundler.plugin(lr);
     bundler.on("update", () => {
         compileFiles();
         let stream = bundler.bundle().on("error", console.error).pipe(source("bundle.js")).pipe(buffer());

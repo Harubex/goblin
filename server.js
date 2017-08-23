@@ -12,6 +12,7 @@ app.set("title", "Goblin Guide");
 app.use(compression());
 app.use(helmet());
 app.use(express.static("build"));
+app.use(express.static("static"));
 app.use("/card", require("./routers/card-router"));
 app.use("/api", require("./routers/api-router"));
 app.use(require("./middleware/404"));
