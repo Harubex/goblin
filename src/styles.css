@@ -7,9 +7,11 @@
 
 .card-image {
     box-shadow: 1px 1px 8px rgba(0,0,0,0.5);
-    background: url(/cardback.png) no-repeat scroll 0 0;
-    width: 250px;
-    height: auto;
     border-radius: 4.75% / 3.5%;
     display: inline-grid;
+}
+
+.card-image-container {
+    width: 250px;
+    background-image: url(/cardback.png);
 }

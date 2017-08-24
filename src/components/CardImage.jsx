@@ -5,13 +5,15 @@ export default class CardImage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: "../cardback.png"
+            url: "/cardback.png"
         };
     }
               
     render() {
         return (
-            <img className="card-image" src={this.props.url || this.state.url} />
+            <div className="card-image-container" style={{width: this.props.width}}>
+                <img className="card-image temp" src={this.props.url || this.state.url} />
+            </div>
         );
     }
 }
