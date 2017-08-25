@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ***REMOVED*** AppContainer ***REMOVED*** from "react-hot-loader";
 import ***REMOVED*** BrowserRouter ***REMOVED*** from "react-router-dom";
+import ***REMOVED*** Fabric ***REMOVED*** from "office-ui-fabric-react";
 
 import App from "./App";
 
@@ -12,7 +13,9 @@ delete window.serverState;
 ReactDOM.render((
     <AppContainer>
             <BrowserRouter>
-                <App context=***REMOVED***serverState***REMOVED*** />
+                <Fabric>
+                    <App context=***REMOVED***serverState***REMOVED*** />
+                </Fabric>
             </BrowserRouter>
     </AppContainer>
 ), document.getElementById("base-container"));

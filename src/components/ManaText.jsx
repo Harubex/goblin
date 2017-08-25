@@ -6,7 +6,7 @@ import ManaCost from "./ManaCost";
 export default class ManaText extends React.Component ***REMOVED***
     render() ***REMOVED***
         return (
-            <span>***REMOVED***this.parseContent(this.props.content)***REMOVED***</span>
+            <span className="ms-font-su ms-fontColor-themePrimary">***REMOVED***this.parseContent(this.props.content)***REMOVED***</span>
         );
     ***REMOVED***
 

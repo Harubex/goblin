@@ -12,7 +12,7 @@ export default class CardImage extends React.Component ***REMOVED***
     render() ***REMOVED***
         return (
             <div className="card-image-container" style=***REMOVED******REMOVED***width: this.props.width***REMOVED******REMOVED***>
-                <img className="card-image temp" src=***REMOVED***this.props.url || this.state.url***REMOVED*** />
+                <img className="card-image" src=***REMOVED***this.props.url***REMOVED*** />
             </div>
         );
     ***REMOVED***
