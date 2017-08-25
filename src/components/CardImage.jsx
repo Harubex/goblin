@@ -12,7 +12,7 @@ export default class CardImage extends React.Component {
     render() {
         return (
             <div className="card-image-container" style={{width: this.props.width}}>
-                <img className="card-image temp" src={this.props.url || this.state.url} />
+                <img className="card-image" src={this.props.url} />
             </div>
         );
     }

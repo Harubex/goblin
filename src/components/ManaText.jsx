@@ -6,7 +6,7 @@ import ManaCost from "./ManaCost";
 export default class ManaText extends React.Component {
     render() {
         return (
-            <span>{this.parseContent(this.props.content)}</span>
+            <span className="ms-font-su ms-fontColor-themePrimary">{this.parseContent(this.props.content)}</span>
         );
     }
 

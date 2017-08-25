@@ -10,14 +10,14 @@ router.get("/ping", (req, resp) => {
 });
 
 router.get("/card", (req, resp) => {
-    dasda("select * from card", {}, resp);
+    res("select * from card", {}, resp);
 });
 
 router.get("/test", (req, resp) => {
-    dasda("select * from scryfall_cards", {}, resp);
+    res("select * from scryfall_cards", {}, resp);
 });
 
-function dasda(query, args, resp) {
+function res(query, args, resp) {
     conn.query(query, args, (err, res) => {
         if (err) {
             debug(err);
