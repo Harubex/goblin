@@ -1,4 +1,4 @@
-***REMOVED***
+{
 	// See http://go.microsoft.com/fwlink/?LinkId=733558
 	// for the documentation about the tasks.json format
 	"version": "0.1.0",
@@ -8,7 +8,7 @@
 	"suppressTaskName": true,
 	"echoCommand": true,
 	"tasks": [
-		***REMOVED***
+		{
 			"taskName": "build",
 			"isShellCommand": true,
 			"isBackground": true,
@@ -16,14 +16,14 @@
 				"build-client",
 				"--debug"
 			],
-			"options": ***REMOVED***
-				"env": ***REMOVED***
+			"options": {
+				"env": {
 					"NODE_ENV": "development"
-				***REMOVED***
-			***REMOVED***,
+				}
+			},
 			"command": "gulp"
-		***REMOVED***,
-		***REMOVED***
+		},
+		{
 			"taskName": "test",
 			"isShellCommand": true,
 			"isBackground": true,
@@ -33,6 +33,6 @@
 				"--debug"
 			],
 			"command": "gulp"
-		***REMOVED***		
+		}		
 	]
-***REMOVED***
+}

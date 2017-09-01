@@ -1,43 +1,43 @@
 const fs = require("fs");
 const mysql = require("mysql");
 
-class DBConnection ***REMOVED***
+class DBConnection {
 
-    constructor(connInfo) ***REMOVED***
+    constructor(connInfo) {
         this.connInfo = connInfo;
         checkCreds(this);
-    ***REMOVED***
+    }
 
     /**
      * Performs a query.
-     * @param ***REMOVED***string***REMOVED*** query
-     * @param ***REMOVED***any[]***REMOVED*** args
-     * @param ***REMOVED***Function***REMOVED*** cb 
+     * @param {string} query
+     * @param {any[]} args
+     * @param {Function} cb 
      */
-    query(query, args, cb) ***REMOVED***
-        checkCreds(this, () => ***REMOVED***
+    query(query, args, cb) {
+        checkCreds(this, () => {
             let conn = mysql.createConnection(this.connInfo);
             conn.connect();
-            conn.query(mysql.format(query, args), (err, res) => ***REMOVED***
+            conn.query(mysql.format(query, args), (err, res) => {
                 conn.end();
                 cb(err, res);
-            ***REMOVED***);
-        ***REMOVED***);
-    ***REMOVED***
-***REMOVED***
+            });
+        });
+    }
+}
 
-function checkCreds(instance, cb = () => ***REMOVED******REMOVED***) ***REMOVED***
-    if (!instance.connInfo) ***REMOVED***
-        fs.readFile("credentials/db-creds.json", "utf8", (err, res) => ***REMOVED***
-            if (err) ***REMOVED***
+function checkCreds(instance, cb = () => {}) {
+    if (!instance.connInfo) {
+        fs.readFile("credentials/db-creds.json", "utf8", (err, res) => {
+            if (err) {
                 throw err;
-            ***REMOVED***
+            }
             instance.connInfo = JSON.parse(res);
             cb();
-        ***REMOVED***);
-    ***REMOVED*** else ***REMOVED***
+        });
+    } else {
         cb();
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 module.exports = DBConnection;

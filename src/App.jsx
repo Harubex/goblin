@@ -1,25 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ManaText from "./components/ManaText";
-import CardImage from "./components/CardImage";
+import CardProfile from "./CardProfile";
+import Collections from "./Collections";
 import HeaderBar from "./components/HeaderBar";
+import { Route } from "react-router-dom";
 
-export default class App extends React.Component ***REMOVED***
+export default class App extends React.Component {
 
-    constructor(props) ***REMOVED***
+    constructor(props) {
         super(props);
-    ***REMOVED***
+    }
 
-    render() ***REMOVED***
+    render() {
         return (
             <div>
                 <HeaderBar />
-                ***REMOVED***this.props.context.name***REMOVED*** <br/><br/>
-                <CardImage url=***REMOVED***""***REMOVED*** />
-                <ManaText content=***REMOVED***this.props.context.oracle_text***REMOVED*** /><br/><br/>
-                <a href=***REMOVED***"/card/" + this.props.context.set + "/" + (parseInt(this.props.context.collector_number) - 1)***REMOVED***>Previous</a>
-                <a href=***REMOVED***"/card/" + this.props.context.set + "/" + (parseInt(this.props.context.collector_number) + 1)***REMOVED***>Next</a>
+                <Route path="/card/:set/:code" render={() => <CardProfile cardData={this.props.context} />} />
+                <Route path="/collections" render={() => <Collections collectionData={this.props.context} />} />
             </div>
         );
-    ***REMOVED***
-***REMOVED***
+    }
+}

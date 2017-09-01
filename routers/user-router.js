@@ -6,20 +6,20 @@ const DBConnection = require("../data/db-conn");
 const router = express.Router();
 const conn = new DBConnection();
 
-router.post("/login", (req, resp) => ***REMOVED***
+router.post("/login", (req, resp) => {
 
-***REMOVED***);
+});
 
-router.post("/register", (req, resp) => ***REMOVED***
-    const body = req.body || ***REMOVED******REMOVED***;
-    if (!body.username) ***REMOVED***
+router.post("/register", (req, resp) => {
+    const body = req.body || {};
+    if (!body.username) {
         resp.status(500).send("A username is required.");
-    ***REMOVED*** else if (!body.password) ***REMOVED***
+    } else if (!body.password) {
         resp.status(500).send("A password is required.");
-    ***REMOVED*** else ***REMOVED***
+    } else {
         connection.query
         resp.redirect("/");
-    ***REMOVED***
-***REMOVED***);
+    }
+});
 
 module.exports = router;
