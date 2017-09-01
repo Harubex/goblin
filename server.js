@@ -30,6 +30,7 @@ app.use(session({
 app.use("/card", require("./routers/card-router"));
 app.use("/user", require("./routers/user-router"));
 app.use("/api", require("./routers/api-router"));
+app.use("/collections", require("./routers/collections-router"))
 app.use(express.static("build"));
 app.use(express.static("static"));
 app.use(require("./middleware/404"));

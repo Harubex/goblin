@@ -3,7 +3,6 @@ import gulp from "gulp";
 import browserify from "browserify";
 import watchify from "watchify";
 import babelify from "babelify";
-import lr from "livereactload";
 import source from "vinyl-source-stream";
 import buffer from "vinyl-buffer";
 import babel from "gulp-babel";
@@ -20,7 +19,6 @@ gulp.task("build-client", ["build-server"], () => {
     }));
     bundler = watchify(bundler);
     bundler.transform(babelify);
-    //bundler.plugin(lr);
     bundler.on("update", () => {
         compileFiles();
         let stream = bundler.bundle().on("error", console.error).pipe(source("bundle.js")).pipe(buffer());
