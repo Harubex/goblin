@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid/v4";
 import { withStyles } from "material-ui/styles";
-import CollectionCard from "./components/CollectionCard";
+import SetCard from "./components/SetCard";
 
 class Collection extends React.Component {
 
@@ -10,8 +10,8 @@ class Collection extends React.Component {
         const classes = this.props.classes;
         return (
             <div className={`${classes.set_container} container`}>
-                {this.props.collectionData.map((collection) => (
-                    <CollectionCard key={uuid()} id={collection.id} name={collection.name} size={collection.size} />
+                {this.props.context.setData.map((set) => (
+                    <SetCard key={uuid()} id={this.props.context.collectionId} code={set.code} name={set.name} size={set.card_count} />
                 ))}
             </div>
         );

@@ -12,11 +12,12 @@ export default class App extends React.Component {
     render() {
         return (
             <div className="container">
-                {this.props.cardData.name} <br/><br/>
+                {this.props.context.from && <a href={"/collections/" + this.props.context.from + "/" + this.props.context.card.set}>Back to Collection</a>}
+                {this.props.context.card.name} <br/><br/>
                 <CardImage url={""} />
-                <ManaText content={this.props.cardData.oracle_text} /><br/><br/>
-                <a href={"/card/" + this.props.cardData.set + "/" + (parseInt(this.props.cardData.collector_number) - 1)}>Previous</a>
-                <a href={"/card/" + this.props.cardData.set + "/" + (parseInt(this.props.cardData.collector_number) + 1)}>Next</a>
+                <ManaText content={this.props.context.card.oracle_text} /><br/><br/>
+                <a href={"/card/" + this.props.context.card.set + "/" + (parseInt(this.props.context.card.collector_number) - 1)}>Previous</a>
+                <a href={"/card/" + this.props.context.card.set + "/" + (parseInt(this.props.context.card.collector_number) + 1)}>Next</a>
             </div>
         );
     }

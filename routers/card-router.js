@@ -10,7 +10,10 @@ let cache = [];
 router.get("/:set/:code", (req, resp) => {
     // Check if card data is cached.
     if (cache[req.params.set] && cache[req.params.set][req.params.code]) {
-        send(resp, cache[req.params.set][req.params.code]);
+        send(resp, {
+            from: req.query.from,
+            card: cache[req.params.set][req.params.code]
+        });
     } else {
         // Fetch data if not cached.
         scryfall.getCard(req.params.set, parseInt(req.params.code), (err, card) => {
@@ -21,7 +24,10 @@ router.get("/:set/:code", (req, resp) => {
                     cache[req.params.set] = [];
                 }
                 cache[req.params.set][req.params.code] = card;
-                send(resp, card);
+                send(resp, {
+                    from: req.query.from,
+                    card: card
+                });
             }
         });
     }

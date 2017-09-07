@@ -11,8 +11,8 @@ export default class CardImage extends React.Component {
               
     render() {
         return (
-            <div className="card-image-container" style={{width: this.props.width}}>
-                <img className="card-image" src={this.props.url} />
+            <div className="card-image-container">
+                <img className={`${this.props.className} card-image`} src={this.props.url} style={{width: this.props.width, background: "url('/cardback.png') no-repeat"}} />
             </div>
         );
     }
