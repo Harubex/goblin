@@ -11,7 +11,7 @@ class DBConnection {
     /**
      * Performs a query.
      * @param {string} query
-     * @param {any[]} args
+     * @param {any} args
      * @param {Function} cb 
      */
     query(query, args, cb) {
