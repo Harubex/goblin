@@ -4,37 +4,19 @@ import { withStyles } from "material-ui/styles";
 import Card, { CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import Typography from "material-ui/Typography";
+import SetSymbol from "./SetSymbol";
 
-const styles = theme => ({
-    card: {
-        display: "inline-block",
-        width: 250,
-        height: 140,
-        textAlign: "center",
-        textDecoration: "none",
-        margin: "6px 10px"
-    },
-    title: {
-        marginBottom: 16,
-        fontSize: 14,
-        color: theme.palette.text.secondary,
-    },
-    pos: {
-        marginBottom: 12,
-        color: theme.palette.text.secondary,
-    }
-});
-
-class CollectionCard extends React.Component {
+class SetCard extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <a href={`collections/${this.props.id}`}>
+            <a href={`${this.props.id}/${this.props.code}`}>
                 <Card className={classes.card}>
                     <CardContent>
                         <Typography type="body1" className={classes.title}>
                             {this.props.name}
                         </Typography>
+                        <SetSymbol className={classes.symbol} setCode={this.props.code} size={2} />
                         <Typography type="body1" className={classes.pos}>
                             {this.props.size} Card{this.props.size != 1 ? "s" : ""}
                         </Typography>
@@ -45,14 +27,33 @@ class CollectionCard extends React.Component {
     }
 }
 
-CollectionCard.propTypes = {
-    id: PropTypes.number.isRequired,
+SetCard.propTypes = {
+    code: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     size: PropTypes.number.isRequired
 }
 
-CollectionCard.defaultProps = {
+SetCard.defaultProps = {
     size: 0
 }
 
-export default withStyles(styles)(CollectionCard);
+export default withStyles((theme) => ({
+    card: {
+        display: "inline-block",
+        width: 250,
+        height: 140,
+        textAlign: "center",
+        textDecoration: "none",
+        margin: "6px 10px"
+    },
+    title: {
+        fontSize: 14,
+        color: theme.palette.text.secondary,
+    },
+    symbol: {
+        padding: "10px"
+    },
+    pos: {
+        color: theme.palette.text.secondary,
+    }
+}))(SetCard);

@@ -2,6 +2,7 @@ const debug = require("debug")("server/collections");
 const express = require("express");
 const DBConnection = require("../data/db-conn");
 const send = require("./static-router");
+const scryfall = require("scryfall");
 
 const router = express.Router();
 const conn = new DBConnection();
@@ -18,7 +19,21 @@ router.get("/", (req, resp) => {
 });
 
 router.get("/:collectionId", (req, resp) => {
+    scryfall.allSets((setData) => {
+        send(resp, {
+            collectionId: req.params.collectionId,
+            setData: setData
+        });
+    });
+});
 
+router.get("/:collectionId/:setCode", (req, resp) => {
+    scryfall.fromSet(req.params.setCode, (cardData) => {
+        send(resp, {
+            collectionId: req.params.collectionId,
+            cardData: cardData
+        });
+    });
 });
 
 module.exports = router;

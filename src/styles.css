@@ -11,10 +11,6 @@
     display: inline-grid;
 }
 
-.card-image-container {
-    width: 250px;
-}
-
 .container {
     margin: 0 auto;
     max-width: 1280px;
