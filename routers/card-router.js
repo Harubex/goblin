@@ -16,7 +16,7 @@ router.get("/:set/:code", (req, resp) => {
         });
     } else {
         // Fetch data if not cached.
-        scryfall.getCard(req.params.set, parseInt(req.params.code), (err, card) => {
+        scryfall.getCard(req.params.set, req.params.code, (err, card) => {
             if (err) {
                 resp.status(404).send(err.message);
             } else {

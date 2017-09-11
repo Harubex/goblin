@@ -5,13 +5,17 @@ import { withStyles } from "material-ui/styles";
 
 class SetSymbol extends React.Component {
     render() {
-        return (
-            <Icon className={`${this.props.className} set-symbol ss ss-${this.props.setCode} ${this.props.rarity != "common" && this.props.gradient && 'ss-grad'} ${this.props.rarity && 'ss-' + this.props.rarity} ${'ss-' + this.props.size + 'x'}`} style={{marginTop: "-2px"}} />
+        const setIcon = <Icon className={`${this.props.className} set-symbol ss ss-${this.props.setCode} ${this.props.rarity != "common" && this.props.gradient && 'ss-grad'} ${this.props.rarity && 'ss-' + this.props.rarity} ${'ss-' + this.props.size + 'x'}`} style={{marginTop: "-2px"}} />;
+        return this.props.url ? (
+            <img className={setIcon.props.className} src={this.props.url} />
+        ) : (
+            setIcon
         );
     }
 }
 
 SetSymbol.propTypes = {
+    url: PropTypes.string,
     setCode: PropTypes.string.isRequired,
     rarity: PropTypes.string,
     gradient: PropTypes.bool,

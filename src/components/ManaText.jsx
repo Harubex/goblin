@@ -21,8 +21,12 @@ export default class ManaText extends React.Component {
             chunks.push(content.substr(last));
             return chunks.filter((ele) => ele !== "").reduce((prev, curr) => {
                 if (typeof(curr) === "string") {
-                    curr.split("\n").forEach((ele, i) => {
-                        prev.push(i > 0 ? <p key={uuid()}>{ele}</p> : ele);
+                    curr.split("\n").forEach((ele, i, arr) => {
+                        let addEles = [<p className="inline-text" key={uuid()}>{ele}</p>];
+                        if (i < arr.length - 1) {
+                            addEles.push(<p className="break-text"></p>);
+                        }
+                        prev.push(addEles);
                     });
                 } else {
                     prev.push(curr);

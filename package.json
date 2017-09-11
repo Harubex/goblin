@@ -31,7 +31,7 @@
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
-    "scryfall": "^0.0.9",
+    "scryfall": "^0.1.3",
     "uuid": "^3.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",

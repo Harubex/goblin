@@ -18,7 +18,7 @@ class CardGlance extends React.Component {
                         </Typography>
                         <CardImage className={classes.cardImage} url={this.props.image_uri} width="100px" />
                         <Typography type="body1" className={classes.pos}>
-                            ${this.props.usd}
+                            ${this.props.usd || "0.00"}
                         </Typography>
                     </CardContent>
                 </Card>
