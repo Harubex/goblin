@@ -6,6 +6,7 @@ const compression = require("compression");
 const mysql = require("mysql");
 const uuid = require("uuid/v4");
 const session = require("express-session");
+const bodyParser = require("body-parser");
 const MySQLStore = require("express-mysql-session")(session);
 
 const app = express();
@@ -20,6 +21,8 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(compression());
 app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false })) 
+app.use(bodyParser.json())
 app.use(session({
     secret: "sample text",
     name: "goblin-cookie",
