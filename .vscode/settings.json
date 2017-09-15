@@ -1,6 +1,6 @@
-// Place your settings in this file to overwrite the default settings
 {
     "editor.fontSize": 17,
+    "editor.fontFamily": "Consolas",
     "workbench.sideBar.location": "right",
     "typescript.referencesCodeLens.enabled": true,
     "files.exclude": {
@@ -32,11 +32,13 @@
         "editor.detectIndentation": true,
         "editor.tabSize": 4
     },
+    "css.validate": true,
     "editor.detectIndentation": true,
     "editor.tabSize": 4,
     "editor.codeLens": true,
     "diffEditor.renderSideBySide": true,
     "debug.allowBreakpointsEverywhere": true,
     "debug.inlineValues": true,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "eslint.enable": false
 }
