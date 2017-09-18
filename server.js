@@ -19,6 +19,9 @@ if (process.env.NODE_ENV === "production") {
     cookieSecure = true;
 }
 
+const rebuild = require("./data/rebuild");
+rebuild();
+
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false })) 

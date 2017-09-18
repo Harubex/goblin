@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
   `id` varchar(64) NOT NULL,
+  `mtgjson_code` varchar(8) NOT NULL,
   `layout` varchar(16) DEFAULT NULL,
   `name` varchar(256) NOT NULL,
   `names` json DEFAULT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
   `number` varchar(16) DEFAULT NULL,
   `power` varchar(8) DEFAULT NULL,
   `toughness` varchar(8) DEFAULT NULL,
-  `loyalty` int(11) DEFAULT NULL,
+  `loyalty` varchar(8) DEFAULT NULL,
   `multiverseid` int(11) DEFAULT NULL,
   `variations` json DEFAULT NULL,
   `imageName` varchar(256) DEFAULT NULL,
@@ -30,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
   `reserved` tinyint(1) DEFAULT NULL,
   `releaseDate` date DEFAULT NULL,
   `starter` tinyint(1) DEFAULT NULL,
-  `mciNumber` int(11) DEFAULT NULL,
   `rulings` json DEFAULT NULL,
   `foreignNames` json DEFAULT NULL,
   `printings` json DEFAULT NULL,
@@ -40,11 +40,11 @@ CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
   `source` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
 
 CREATE TABLE IF NOT EXISTS `mtgjson_sets` (
   `code` varchar(8) NOT NULL,
-  `name` varchar(64) NOT NULL,
+  `name` varchar(128) NOT NULL,
   `gathererCode` varchar(8) DEFAULT NULL,
   `oldCode` varchar(8) DEFAULT NULL,
   `magicCardsInfoCode` varchar(8) DEFAULT NULL,
@@ -56,9 +56,9 @@ CREATE TABLE IF NOT EXISTS `mtgjson_sets` (
   `booster` json DEFAULT NULL,
   PRIMARY KEY (`code`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
 
-CREATE TABLE IF NOT EXISTS `scryfall_cards` (
+CREATE TABLE `scryfall_cards` (
   `id` varchar(36) NOT NULL,
   `object` varchar(16) DEFAULT NULL,
   `multiverse_id` int(11) DEFAULT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `scryfall_cards` (
   `mana_cost` varchar(64) DEFAULT NULL,
   `power` varchar(8) DEFAULT NULL,
   `toughness` varchar(8) DEFAULT NULL,
-  `loyalty` int(11) DEFAULT NULL,
+  `loyalty` varchar(8) DEFAULT NULL,
   `colors` json DEFAULT NULL,
   `color_identity` json DEFAULT NULL,
   `layout` varchar(64) DEFAULT NULL,
@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS `scryfall_cards` (
   `legalities` json DEFAULT NULL,
   `reserved` tinyint(1) DEFAULT NULL,
   `reprint` tinyint(1) DEFAULT NULL,
-  `set` varchar(4) DEFAULT NULL,
-  `set_name` varchar(32) DEFAULT NULL,
+  `set` varchar(8) DEFAULT NULL,
+  `set_name` varchar(128) DEFAULT NULL,
   `set_uri` varchar(256) DEFAULT NULL,
   `scryfall_set_uri` varchar(256) DEFAULT NULL,
   `collector_number` varchar(45) DEFAULT NULL,
@@ -98,12 +98,16 @@ CREATE TABLE IF NOT EXISTS `scryfall_cards` (
   `timeshifted` tinyint(1) DEFAULT NULL,
   `colorshifted` tinyint(1) DEFAULT NULL,
   `futureshifted` tinyint(1) DEFAULT NULL,
+  `story_spotlight_number` int(11) DEFAULT NULL,
+  `story_spotlight_uri` varchar(256) DEFAULT NULL,
+  `edhrec_rank` int(11) DEFAULT NULL,
+  `full_art` tinyint(1) DEFAULT NULL,
   `usd` varchar(45) DEFAULT NULL,
   `eur` varchar(45) DEFAULT NULL,
   `tix` varchar(45) DEFAULT NULL,
   `related_uris` json DEFAULT NULL,
   `purchase_uris` json DEFAULT NULL,
+  `watermark` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
