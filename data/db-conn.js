@@ -1,5 +1,6 @@
 const fs = require("fs");
 const mysql = require("mysql");
+const isJSON = require("is-json");
 
 class DBConnection {
 
@@ -37,10 +38,8 @@ function parseObject(data) {
         }
     } else if (typeof(data) === "object") {
         for (let key in data) {
-            try {
-                data[key] = JSON.parse(data[key]);
-            } catch (_) { // This is janky.
-                continue;
+            if (isJSON(data[key], true)) {
+                data[key] = JSON.parse(data[key])
             }
         }
     }

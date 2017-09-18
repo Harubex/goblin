@@ -2243,6 +2243,10 @@ is-in-browser@^1.0.2:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/is-in-browser/-/is-in-browser-1.1.3.tgz#56ff4db683a078c6082eb95dad7dc62e1d04f835"
 
+is-json@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/is-json/-/is-json-2.0.1.tgz#6be166d144828a131d686891b983df62c39491ff"
+
 is-number@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-2.1.0.tgz#01fcbbb393463a548f2f466cce16dece49db908f"
@@ -2639,15 +2643,15 @@ map-cache@^0.2.0:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
 
-material-ui-icons@^1.0.0-beta.5:
-  version "1.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/material-ui-icons/-/material-ui-icons-1.0.0-beta.5.tgz#ff012ffd1f6c6e08d65ba91ecdc667286931b45c"
+material-ui-icons@^1.0.0-beta.10:
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/material-ui-icons/-/material-ui-icons-1.0.0-beta.10.tgz#d3ddf80bc8fbcfbe93be1519a852e7ea79bd01d9"
   dependencies:
     recompose "^0.24.0"
 
-material-ui@1.0.0-beta.9:
-  version "1.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-1.0.0-beta.9.tgz#97f8a3c727232c0466e1f154c22204abc75ce2e4"
+material-ui@1.0.0-beta.10:
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-1.0.0-beta.10.tgz#8aaa5a8cf9cee366f42c31c7fb6d8a2d37039404"
   dependencies:
     babel-runtime "^6.26.0"
     brcast "^3.0.1"
@@ -2662,6 +2666,7 @@ material-ui@1.0.0-beta.9:
     prop-types "^15.5.10"
     react-event-listener "^0.5.0"
     react-jss "^7.1.0"
+    react-popper "^0.7.2"
     react-scrollbar-size "^2.0.0"
     react-transition-group "^2.2.0"
     recompose "^0.24.0"
@@ -3094,6 +3099,10 @@ platform@1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/platform/-/platform-1.3.4.tgz#6f0fb17edaaa48f21442b3a975c063130f1c3ebd"
 
+popper.js@^1.10.8:
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.5.tgz#229e4dea01629e1f1a1e26991ffade5024220fa6"
+
 preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
@@ -3257,6 +3266,14 @@ react-jss@^7.1.0:
     jss-preset-default "^3.0.0"
     prop-types "^15.5.8"
     theming "^1.1.0"
+
+react-popper@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.2.tgz#5daa821eadc6f2ca802176d7be271d0f03f25f58"
+  dependencies:
+    is-equal-shallow "^0.1.3"
+    popper.js "^1.10.8"
+    prop-types "^15.5.10"
 
 react-redux@^5.0.6:
   version "5.0.6"
@@ -3544,9 +3561,9 @@ scroll@^2.0.0:
   dependencies:
     rafl "~1.2.1"
 
-scryfall@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/scryfall/-/scryfall-0.1.3.tgz#3828d98fe20d679b84a430797eec38fde9fa0b96"
+scryfall@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/scryfall/-/scryfall-0.1.4.tgz#0a90c7b46b19a5ffa7ea2e5a53b7c17058bd5474"
 
 semver@^4.1.0:
   version "4.3.6"

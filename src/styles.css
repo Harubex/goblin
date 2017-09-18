@@ -1,3 +1,7 @@
+body {
+    background-color: darkslategrey;
+}
+
 .mana-cost {
     display: inline-block;
     position: relative;

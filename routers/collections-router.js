@@ -4,6 +4,9 @@ const DBConnection = require("../data/db-conn");
 const send = require("./static-router");
 const scryfall = require("scryfall");
 
+
+const rebuild = require("../data/rebuild");
+
 const router = express.Router();
 const conn = new DBConnection();
 

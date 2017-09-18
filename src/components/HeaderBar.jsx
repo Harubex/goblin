@@ -34,9 +34,15 @@ class HeaderBar extends React.Component {
                             </a>
                         </div>
                         <div className={classes.rightItems}>
-                            <a href="/login">
-                                <Button color="contrast">Login</Button>
-                            </a>
+                            {this.props.currentUser ? (
+                                <a href="/account">
+                                    <Button color="contrast">{this.props.currentUser}</Button>
+                                </a>
+                            ) : (
+                                <a href="/login">
+                                    <Button color="contrast">Login</Button>
+                                </a>
+                            )}
                             <a href="/register">
                                 <Button color="contrast">Register</Button>
                             </a>

@@ -16,7 +16,7 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <HeaderBar />
+                <HeaderBar currentUser={null} />
                 <Route path="/card/:set/:code" render={() => <CardProfile context={this.props.context} />} />
                 <Route path="/collections" exact render={() => <Collections collectionData={this.props.context} />} />
                 <Route path="/collections/:id" exact render={() => <Collection context={this.props.context} />} />
