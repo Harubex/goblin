@@ -9,7 +9,9 @@ module.exports = (req, resp) => {
             root: rootPath
         });
     } else if (req.accepts("json")) {
-        resp.json({ error: message });
+        resp.json({
+            error: message 
+        });
     } else {
         resp.type("txt").send(message);
     }
