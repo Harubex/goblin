@@ -18,6 +18,21 @@ router.get("/", (req, resp) => {
     });
 });
 
+router.delete("/:collectionId", (req, resp) => {
+    conn.query(`
+        delete * from collection_card where collection_id = ?;
+        delete * from collection where id = ?;
+    `, [req.params.collectionId, req.params.collectionId], (err, res) => {
+        if (err) {
+            debug(err);
+        } else {
+            send(resp, {
+                message: `Collection (${req.params.collectionId}) deleted successfully.`
+            });
+        }
+    });
+});
+
 router.get("/:collectionId", (req, resp) => {
     conn.query(`select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
         left join collection_card cc on cc.collection_id = co.id 

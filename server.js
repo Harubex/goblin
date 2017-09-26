@@ -11,7 +11,7 @@ const MySQLStore = require("express-mysql-session")(session);
 
 const app = express();
 const port = 8000;
-process.env.rebuilding = true;
+
 if (process.env.rebuilding) {
     let rebuild = require("./data/rebuild");
     rebuild.buildScryfallDB();
