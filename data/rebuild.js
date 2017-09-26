@@ -8,7 +8,7 @@ const conn = new DBConnection();
 
 let query, setQuery, cardQuery;
 
-module.exports = function() {
+module.exports.buildMtgJsonDB = function() {
     fs.readFile("./data/mtgjson_sets_insert.sql", "utf8", (err, _setQuery) => {
         setQuery = _setQuery;
         fs.readFile("./data/mtgjson_cards_insert.sql", "utf8", (err, _cardQuery) => {
@@ -28,14 +28,52 @@ module.exports = function() {
             });         
         });
     });
-    /*
-    conn.query("truncate scryfall_cards;", {}, () => {
-        fs.readFile("./data/scryfall_insert.sql", "utf8", (err, data) => {
+}
+
+module.exports.buildScryfallDB = function() {
+    conn.query("truncate scryfall_sets;", () => {
+        fs.readFile("./data/scryfall_sets_insert.sql", "utf8", (err, setQuery) => {
+            if (err) {
+                throw err;
+            }
+            let queryData = [];
+            scryfall.allSets((sets) => {
+                sets.forEach((set) => {
+                    let info = [
+                        set.code,
+                        set.name,
+                        set.uri,
+                        set.scryfall_uri,
+                        set.released_at,
+                        set.set_type,
+                        set.card_count,
+                        set.icon_svg_uri
+                    ];
+                    for (let x = 0; x < info.length; x++) {
+                        if (info[x] && typeof(info[x]) === "object") {
+                            info[x] = mysql.escape(JSON.stringify(info[x]));
+                        } else {
+                            info[x] = mysql.escape(info[x]);
+                        }
+                    }  
+                    queryData.push(`(${info.join(", ")})`);
+                });    
+                conn.query(setQuery + queryData.join(", ") + "; show warnings;", (err, data) => {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log("sets added");
+                });
+            });
+        });
+    });
+   /* conn.query("truncate scryfall_cards;", () => {
+        fs.readFile("./data/scryfall_cards_insert.sql", "utf8", (err, data) => {
             if (err) {
                 throw err;
             }
             query = data;
-            buildFromScryfall(1, (cards) => {
+            getScryfallCardPage(1, (cards) => {
                 conn.query("truncate cards; insert into cards (scryfall_id) select id from scryfall_cards;", {}, () => {
                     console.log(cards.length + " cards processed.");
                 });
@@ -44,7 +82,7 @@ module.exports = function() {
     });*/
 }
 
-function buildFromScryfall(page, cb, _data = []) {
+function getScryfallCardPage(page, cb, _data = []) {
     scryfall.getAllCards(page, (cards) => {
         if (Array.isArray(cards) && cards.length > 0) {
             let queryData = [];
@@ -81,7 +119,7 @@ function buildFromScryfall(page, cb, _data = []) {
                 console.log("page " + page);
                 console.log(JSON.stringify(data));
                 _data = _data.concat(cards);
-                buildFromScryfall(page + 1, cb, _data);
+                getScryfallCardPage(page + 1, cb, _data);
             });
         } else {
             cb(_data);

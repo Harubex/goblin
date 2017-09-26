@@ -3561,9 +3561,9 @@ scroll@^2.0.0:
   dependencies:
     rafl "~1.2.1"
 
-scryfall@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/scryfall/-/scryfall-0.1.4.tgz#0a90c7b46b19a5ffa7ea2e5a53b7c17058bd5474"
+scryfall@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/scryfall/-/scryfall-0.1.6.tgz#68d7c5b7e8c1d1a9c7556e845431d5f6c9e7228f"
 
 semver@^4.1.0:
   version "4.3.6"

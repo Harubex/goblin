@@ -12,10 +12,14 @@ class DBConnection {
     /**
      * Performs a query.
      * @param {string} query
-     * @param {any} args
+     * @param {any?} args
      * @param {(err: IError, results?: any, fields?: IFieldInfo) => void} cb 
      */
     query(query, args, cb) {
+        if (typeof(cb) === "undefined") {
+            cb = args;
+            args = {};
+        }
         checkCreds(this, () => {
             let conn = mysql.createConnection(this.connInfo);
             conn.connect();

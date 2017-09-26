@@ -8,11 +8,14 @@ class Collection extends React.Component {
 
     render() {
         const classes = this.props.classes;
+        const sets = this.props.context.sets;
         return (
             <div className={`${classes.set_container} container`}>
-                {this.props.context.setData.map((set) => (
+                {sets.map((set) => (
                     <SetCard key={uuid()} id={this.props.context.collectionId} 
-                        code={set.parent_set_code || set.code} name={set.name} size={set.card_count} />
+                        code={set.parent_set_code || set.code} 
+                        name={set.name} 
+                        size={set.card_count} />
                 ))}
             </div>
         );

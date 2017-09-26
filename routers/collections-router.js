@@ -19,16 +19,19 @@ router.get("/", (req, resp) => {
 });
 
 router.get("/:collectionId", (req, resp) => {
-    conn.query(`select sc.collector_number, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
+    conn.query(`select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
         left join collection_card cc on cc.collection_id = co.id 
         left join cards ca on ca.id = cc.card_id 
         left join scryfall_cards sc on sc.id = ca.scryfall_id 
         where co.id = ? group by sc.set, sc.collector_number`, [req.params.collectionId], (err, res) => {
-            resp.json(res);
+        let sets = {};
+        for (let i = 0; i < res.length; i++) {
+            addCardToSet(sets, res[i]);
+        }
+        conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
+            send(resp, {collectionId: req.params.collectionId, sets: setData});
+        });
     });
-   /* scryfall.allSets((setData) => {
-        send(..)
-    });*/
 });
 
 router.get("/:collectionId/:setCode", (req, resp) => {
@@ -39,5 +42,22 @@ router.get("/:collectionId/:setCode", (req, resp) => {
         });
     });
 });
+
+router.post("/add", (req, resp) => {
+    let body = req.body || {};
+    if (body.collectionName) {
+
+    }
+});
+
+function addCardToSet(sets, cardData) {
+    if (!sets[cardData.set]) {
+        sets[cardData.set] = {
+            set_name: cardData.set_name,
+            cards: []
+        };
+    }
+    sets[cardData.set].cards.push(cardData);
+}
 
 module.exports = router;
