@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ServerRequest from "../ServerRequest";
 import classNames from "classnames";
 import { withStyles } from "material-ui/styles";
 import Dialog, { DialogActions, DialogContent, DialogTitle } from "material-ui/Dialog";
@@ -17,7 +16,8 @@ const styles = (theme) => ({
     card: {
         display: "inline-block",
         textAlign: "center",
-        margin: "6px 10px"
+        margin: "6px 10px",
+        minWidth: "250px"
     },
     cardInfo: {
         textDecoration: "none",
@@ -90,24 +90,23 @@ class CollectionCard extends React.Component {
     }
 
     confirmDelete(context) {
-        ServerRequest.Delete(`/collection/${context.props.id}`, (err, res) => {
-            console.log(res);
-        });
+        fetch(new Request(`/collections/${context.props.id}`, {
+            method: "DELETE"
+        }));
         context.setState({
             deleted: true
         });
         context.closeDialog(context);
     }
 
-
     render() {
         const classes = this.props.classes;
         return (
             <div style={{display: "inline-block"}}>
                 <Card className={classes.card} style={{display: this.state.deleted ? "none" : ""}}>
-                    <a className={classes.cardInfo} href={`collections/${this.props.id}`}>
+                    <a className={classes.cardInfo} href={`/collections/${this.props.id}`}>
                         <CardHeader className={classes.title} 
-                            title={this.props.name + "asdasdasdasdasdasdasdas"}
+                            title={this.props.name}
                             subheader={`${this.props.size} Card${this.props.size != 1 ? "s" : ""}`} />
                         <CardContent>
                             <Typography type="body1" className={classes.pos}>
@@ -122,21 +121,7 @@ class CollectionCard extends React.Component {
                         <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
                             <DeleteIcon />
                         </IconButton>
-                        <div className={classes.flexGrow} />
-                        <IconButton className={classNames(classes.expand, {
-                            [classes.expandOpen]: this.state.expanded,
-                        })} onClick={() => this.handleExpandClick(this)}>
-                        <ExpandMoreIcon />
-                        </IconButton>
                     </CardActions>
-                    <Collapse className={classes.editOptions} in={this.state.expanded} transitionDuration="auto" unmountOnExit>
-                        <IconButton color="primary" className={classes.button} onClick={() => {this.editCollection(this)}}>
-                            <ModeEditIcon />
-                        </IconButton>
-                        <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </Collapse>
                 </Card>
                 <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Delete {this.props.name}</DialogTitle>

@@ -6,8 +6,8 @@ import AddIcon from "material-ui-icons/Add";
 
 class AddButton extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             adding: false
         };
@@ -36,7 +36,7 @@ class AddButton extends React.Component {
                         <Button onClick={() => {this.doneAdding(this)}} color="primary">
                             {this.props.cancelText || "Cancel"}
                         </Button>
-                        <Button onClick={() => {this.props.onAdd(this)}} color="primary">
+                        <Button onClick={() => {this.doneAdding(this); this.props.onAdd(this);}} color="primary">
                             {this.props.doneText || "Done"}
                         </Button>
                     </DialogActions>

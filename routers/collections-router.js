@@ -20,13 +20,13 @@ router.get("/", (req, resp) => {
 
 router.delete("/:collectionId", (req, resp) => {
     conn.query(`
-        delete * from collection_card where collection_id = ?;
-        delete * from collection where id = ?;
+        delete from collection_card where collection_id = ?;
+        delete from collections where id = ?;
     `, [req.params.collectionId, req.params.collectionId], (err, res) => {
         if (err) {
             debug(err);
         } else {
-            send(resp, {
+            resp.json({
                 message: `Collection (${req.params.collectionId}) deleted successfully.`
             });
         }
@@ -44,7 +44,7 @@ router.get("/:collectionId", (req, resp) => {
             addCardToSet(sets, res[i]);
         }
         conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
-            send(resp, {collectionId: req.params.collectionId, sets: setData});
+            send(resp, {collectionId: req.params.collectionId, sets: setData, ownedCards: sets});
         });
     });
 });
@@ -61,18 +61,32 @@ router.get("/:collectionId/:setCode", (req, resp) => {
 router.post("/add", (req, resp) => {
     let body = req.body || {};
     if (body.collectionName) {
-
+        conn.query(`
+            insert into collections (user_id, name) values (?, ?);
+            select * from collections where user_id = ? and name = ?;
+        `, [1, body.collectionName, 1, body.collectionName], (err, data) => {
+            if (err) {
+                debug(err);
+            } else {
+                resp.json({
+                    message: `Collection (${req.params.collectionId}) deleted successfully.`,
+                    data: data[1][0]
+                });
+            }
+        });
     }
 });
 
 function addCardToSet(sets, cardData) {
-    if (!sets[cardData.set]) {
-        sets[cardData.set] = {
-            set_name: cardData.set_name,
-            cards: []
-        };
+    if (cardData.set) { // Don't add null values.
+        if (!sets[cardData.set]) {
+            sets[cardData.set] = {
+                set_name: cardData.set_name,
+                cards: []
+            };
+        }
+        sets[cardData.set].cards.push(cardData);
     }
-    sets[cardData.set].cards.push(cardData);
 }
 
 module.exports = router;

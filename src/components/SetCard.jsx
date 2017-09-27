@@ -9,6 +9,12 @@ import SetSymbol from "./SetSymbol";
 class SetCard extends React.Component {
     render() {
         const classes = this.props.classes;
+        const owned = this.props.ownedCards || {
+            cards: []
+        };
+        const totalCards = owned.cards.reduce((prev, curr) => {
+            return prev += (curr.normal_qty || 0) + (curr.foil_qty || 0)
+        }, 0);
         return (
             <a href={`${this.props.id}/${this.props.code}`}>
                 <Card className={classes.card}>
@@ -17,8 +23,11 @@ class SetCard extends React.Component {
                             {this.props.name}
                         </Typography>
                         <SetSymbol className={classes.symbol} setCode={this.props.code} size={2} />
-                        <Typography type="body1" className={classes.pos}>
-                            {this.props.size} Card{this.props.size != 1 ? "s" : ""}
+                        <Typography type="body2" className={classes.pos}>
+                            {owned.cards.length} / {this.props.size} Card{this.props.size != 1 ? "s" : ""}
+                        </Typography>
+                        <Typography type="body2" className={classes.pos}>
+                            Total Cards: {totalCards}
                         </Typography>
                     </CardContent>
                 </Card>

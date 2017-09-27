@@ -28,8 +28,8 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(compression());
 app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: false })) 
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(session({
     secret: "sample text",
     name: "goblin-cookie",
