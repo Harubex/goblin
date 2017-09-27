@@ -9,8 +9,11 @@ import IconButton from "material-ui/IconButton";
 import Typography from "material-ui/Typography";
 import Collapse from "material-ui/transitions/Collapse";
 import ModeEditIcon from "material-ui-icons/ModeEdit";
+import AddIcon from "material-ui-icons/Add";
 import ExpandMoreIcon from "material-ui-icons/ExpandMore";
 import DeleteIcon from "material-ui-icons/Delete";
+import Tooltip from "material-ui/Tooltip";
+import AddCardDialog from "./AddCardDialog";
 
 const styles = (theme) => ({
     card: {
@@ -64,7 +67,8 @@ class CollectionCard extends React.Component {
         this.state = {
             expanded: false,
             deleteDialogOpen: false,
-            deleted: false
+            deleted: false,
+            addDialogOpen: false
         };
     }
 
@@ -73,30 +77,36 @@ class CollectionCard extends React.Component {
             expanded: !context.state.expanded
         });
     }
-
-    editCollection(context) {
+    
+    addToCollection(ctx) {
+        ctx.setState({
+            addDialogOpen: true
+        });
     }
 
-    deleteCollection(context) {
-        context.setState({
+    editCollection(ctx) {
+    }
+
+    deleteCollection(ctx) {
+        ctx.setState({
             deleteDialogOpen: true
         });
     }
 
-    closeDialog(context) {
-        context.setState({
+    closeDialog(ctx) {
+        ctx.setState({
             deleteDialogOpen: false
         });
     }
 
-    confirmDelete(context) {
-        fetch(new Request(`/collections/${context.props.id}`, {
+    confirmDelete(ctx) {
+        fetch(new Request(`/collections/${ctx.props.id}`, {
             method: "DELETE"
         }));
-        context.setState({
+        ctx.setState({
             deleted: true
         });
-        context.closeDialog(context);
+        ctx.closeDialog(ctx);
     }
 
     render() {
@@ -115,12 +125,21 @@ class CollectionCard extends React.Component {
                         </CardContent>
                     </a>
                     <CardActions className={classes.actions}>
-                        <IconButton color="primary" className={classes.button} onClick={() => {this.editCollection(this)}}>
-                            <ModeEditIcon />
-                        </IconButton>
-                        <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
-                            <DeleteIcon />
-                        </IconButton>
+                        <Tooltip className={classes.tooltip} placement="bottom" title="Add cards">
+                            <IconButton className={classes.button} onClick={() => {this.addToCollection(this)}}>
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip className={classes.tooltip} placement="bottom" title="Change name">
+                            <IconButton color="primary" className={classes.button} onClick={() => {this.editCollection(this)}}>
+                                <ModeEditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip className={classes.tooltip} placement="bottom" title="Delete collection">
+                            <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
                     </CardActions>
                 </Card>
                 <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
@@ -135,6 +154,7 @@ class CollectionCard extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <AddCardDialog open={this.state.addDialogOpen} />
             </div>
         );
     }

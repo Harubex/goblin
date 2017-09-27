@@ -29,6 +29,7 @@
     "mysql": "^2.14.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
+    "react-autosuggest": "^9.3.2",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

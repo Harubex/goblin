@@ -4,6 +4,7 @@ import uuid from "uuid/v4";
 import {withStyles} from "material-ui/styles";
 import CollectionCard from "./components/CollectionCard";
 import AddButton from "./components/AddButton";
+import DialogButton from "./components/generic/DialogButton";
 import TextField from "material-ui/TextField";
 import {DialogContentText} from "material-ui/Dialog";
 
@@ -47,7 +48,7 @@ class Collections extends React.Component {
                 {this.props.collectionData.map((collection) => (
                     <CollectionCard key={uuid()} id={collection.id} name={collection.name} size={collection.size} />
                 ))}
-                <AddButton dialogTitle={"Create a new collection"} dialogContent={(
+                <DialogButton dialogTitle={"Create a new collection"} dialogContent={(
                     <div>
                         <p>Provide a name for the new collection.</p>
                         <TextField id="collectionName" className={classes.nameInput} 
@@ -55,7 +56,7 @@ class Collections extends React.Component {
                             value={this.state.newCollectionName}
                             onChange={(ev) => this.inputChange(this, ev, "collectionName")} />
                     </div>
-                )} doneText="Add" onAdd={() => this.createCollection(this)} />
+                )} doneText="Add" dialogDone={() => this.createCollection(this)}/>
             </div>
         );
     }

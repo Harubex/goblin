@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import AppBar from "material-ui/AppBar"
-import Toolbar from "material-ui/Toolbar";
-import Typography from "material-ui/Typography";
-import Button from "material-ui/Button";
-import IconButton from "material-ui/IconButton";
 import HomeIcon from "material-ui-icons/Home";
 import { withStyles } from "material-ui/styles";
+import AppBar from "material-ui/AppBar";
+import Button from "material-ui/Button";
+import Toolbar from "material-ui/Toolbar";
+import IconButton from "material-ui/IconButton";
+import Typography from "material-ui/Typography";
 
 class HeaderBar extends React.Component { 
     constructor(props) {
@@ -23,27 +23,27 @@ class HeaderBar extends React.Component {
                             <HomeIcon />
                         </IconButton>
                         <div className={classes.leftItems}>
-                            <a href="/cards">
+                            <a className={classes.menuLink} href="/cards">
                                 <Button color="contrast">Card Search</Button>
                             </a>
-                            <a href="/collections">
+                            <a className={classes.menuLink} href="/collections">
                                 <Button color="contrast">Collection Manager</Button>
                             </a>
-                            <a href="/decks">
+                            <a className={classes.menuLink} href="/decks">
                                 <Button color="contrast">Deck Editor</Button>
                             </a>
                         </div>
                         <div className={classes.rightItems}>
                             {this.props.currentUser ? (
-                                <a href="/account">
+                                <a className={classes.menuLink} href="/account">
                                     <Button color="contrast">{this.props.currentUser}</Button>
                                 </a>
                             ) : (
-                                <a href="/login">
+                                <a className={classes.menuLink} href="/login">
                                     <Button color="contrast">Login</Button>
                                 </a>
                             )}
-                            <a href="/register">
+                            <a className={classes.menuLink} href="/register">
                                 <Button color="contrast">Register</Button>
                             </a>
                         </div>
@@ -54,12 +54,20 @@ class HeaderBar extends React.Component {
     }
 }
 
-export default withStyles({
+HeaderBar.propTypes = {
+    currentUser: PropTypes.string
+};
+
+export default withStyles((theme) => ({
     root: {
         width: "100%",
-        paddingBottom: "1em"
+        paddingBottom: "1em",
+    },
+    menuLink: {
+        textDecoration: "none"
     },
     leftItems: {
+        flex: 1
     },
     rightItems: {
     },
@@ -67,4 +75,4 @@ export default withStyles({
         marginLeft: 12,
         marginRight: 20,
     }
-})(HeaderBar);
+}))(HeaderBar);

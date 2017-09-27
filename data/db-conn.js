@@ -9,6 +9,10 @@ class DBConnection {
         checkCreds(this);
     }
 
+    escape(value) {
+        return mysql.escape(value);
+    }
+
     /**
      * Performs a query.
      * @param {string} query

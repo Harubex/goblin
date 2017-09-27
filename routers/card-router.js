@@ -2,8 +2,10 @@ const debug = require("debug")("server/api");
 const express = require("express");
 const scryfall = require("scryfall");
 const send = require("./static-router");
+const DBConnection = require("../data/db-conn");
 
 const router = express.Router();
+const conn = new DBConnection();
 
 let cache = [];
 
@@ -31,6 +33,19 @@ router.get("/:set/:code", (req, resp) => {
             }
         });
     }
+});
+
+router.get("/autocomplete", (req, resp) => {
+    let name = "%" + (req.query.name || "") + "%";
+    conn.query(`select name, mana_cost, type_line from scryfall_cards 
+        where layout not in ('token', 'emblem') and name like ? group by name;`, [name], (err, data) => {
+        if (err) {
+            debug(`Could not fetch info for ${name}.`);
+            debug(err);
+        } else {
+            resp.json(data);
+        }
+    });
 });
 
 module.exports = router;
