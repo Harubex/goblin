@@ -77,6 +77,21 @@ router.post("/add", (req, resp) => {
     }
 });
 
+router.post("/:collectionId/add", (req, resp) => {
+    let body = req.body || {};
+    conn.query(`insert into collection_card (collection_id, card_id, normal_qty, foil_qty)  
+            select ?, c.id, ?, ? from cards c 
+            left join scryfall_cards sc on sc.id = c.scryfall_id 
+            where sc.id = ?;`, [req.params.collectionId, body.normalQty, body.foilQty, body.cardId], (err, data) => {
+        if (err) {
+            debug(err);
+        } else {
+            resp.json({
+            });
+        }
+    });
+});
+
 function addCardToSet(sets, cardData) {
     if (cardData.set) { // Don't add null values.
         if (!sets[cardData.set]) {

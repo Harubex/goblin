@@ -6,7 +6,8 @@ export default class ManaCost extends React.Component {
     render() {
         return (
             <div className="mana-cost">
-                {this.decodeCost(this.props.sym).map((sym) => ( 
+                {this.decodeCost(this.props.sym).map((sym) => (
+                    sym == "/" ? <span key={uuid()}> // </span> :
                     <span key={uuid()} className={`mana ${this.props.size || "small"} shadow s${sym}`}></span> 
                 ))}
             </div>

@@ -15,17 +15,15 @@ class AddCardDialog extends React.Component {
     }
 
     doneAdding(ctx) {
-        ctx.setState({
-            open: false
-        });
+        ctx.props.onClose();
     }
 
     render() {
         const classes = this.props.classes;
         return (
             <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}}>
-                <DialogTitle>Add New Cards</DialogTitle>
-                <DialogContent>
+                <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
+                <DialogContent className={classes.dialogContent}>
                     <AutoCard />
                 </DialogContent>
                 <DialogActions>
@@ -42,7 +40,8 @@ class AddCardDialog extends React.Component {
 }
 
 export default withStyles((theme) => ({
-    addDialog: {
-        width: "400px"
+    dialogContent: {
+        minWidth: "400px",
+        textAlign: "center"
     }
 }))(AddCardDialog);

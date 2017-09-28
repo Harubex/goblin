@@ -37,7 +37,7 @@ router.get("/:set/:code", (req, resp) => {
 
 router.get("/autocomplete", (req, resp) => {
     let name = "%" + (req.query.name || "") + "%";
-    conn.query(`select name, mana_cost, type_line from scryfall_cards 
+    conn.query(`select name, mana_cost, type_line, card_faces from scryfall_cards 
         where layout not in ('token', 'emblem') and name like ? group by name;`, [name], (err, data) => {
         if (err) {
             debug(`Could not fetch info for ${name}.`);
@@ -47,5 +47,22 @@ router.get("/autocomplete", (req, resp) => {
         }
     });
 });
+
+router.get("/sets", (req, resp) => {
+    let name = req.query.name;
+    if (!name) {
+        resp.json([]);
+    } else {
+        conn.query(`select sc.id, sc.\`set\` as code, sc.set_name from scryfall_cards sc 
+            left join scryfall_sets ss on ss.code = sc.set where sc.name = ? order by ss.released_at desc;`, [name], (err, data) => {
+                if (err) {
+                debug(`Could not fetch info for ${name}.`);
+                debug(err);
+            } else {
+                resp.json(data);
+            }
+        });
+    }
+})
 
 module.exports = router;
