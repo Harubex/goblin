@@ -50,11 +50,17 @@ router.get("/:collectionId", (req, resp) => {
 });
 
 router.get("/:collectionId/:setCode", (req, resp) => {
-    scryfall.fromSet(req.params.setCode, (cardData) => {
-        send(resp, {
-            collectionId: req.params.collectionId,
-            cardData: cardData
-        });
+    conn.query(`select sc.collector_number, sc.card_faces, sc.usd, ifnull(cc.normal_qty, 0) as normal_qty, ifnull(cc.foil_qty, 0) as foil_qty, sc.name, sc.image_uris 
+            from magical.scryfall_cards sc left join cards c on c.scryfall_id = sc.id left join collection_card cc on cc.card_id = c.id
+            where sc.\`set\` = ? order by sc.collector_number;`, [req.params.setCode], (err, data) => {
+        if (err) {
+            debug(err);
+        } else {
+            send(resp, {
+                collectionId: req.params.collectionId,
+                cardData: data
+            });
+        }
     });
 });
 

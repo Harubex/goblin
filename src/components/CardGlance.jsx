@@ -17,7 +17,10 @@ class CardGlance extends React.Component {
                             {this.props.name}
                         </Typography>
                         <CardImage className={classes.cardImage} url={this.props.image_uri} width="100px" />
-                        <Typography type="body1" className={classes.pos}>
+                        <Typography type="body2" className={classes.pos}>
+                            Normal: {this.props.normal_qty}   Foil: {this.props.foil_qty}
+                        </Typography>
+                        <Typography type="body2" className={classes.pos}>
                             ${this.props.usd || "0.00"}
                         </Typography>
                     </CardContent>
@@ -39,7 +42,6 @@ export default withStyles((theme) => ({
     card: {
         display: "inline-block",
         width: 250,
-        height: 225,
         textAlign: "center",
         textDecoration: "none",
         margin: "6px 10px"

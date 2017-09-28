@@ -94,7 +94,7 @@ class AutoCard extends React.Component {
     };
 
     setChosen(ctx, cardId) {
-        fetch(new Request("/collection/1/add", {
+        fetch(new Request(`/collections/${this.props.collectionId}/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

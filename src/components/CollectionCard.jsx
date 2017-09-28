@@ -154,7 +154,7 @@ class CollectionCard extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <AddCardDialog open={this.state.addDialogOpen} onClose={() => this.setState({
+                <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} onClose={() => this.setState({
                     addDialogOpen: false
                 })} onAdd={(card) => {
                     

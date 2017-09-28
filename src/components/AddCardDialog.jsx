@@ -24,7 +24,7 @@ class AddCardDialog extends React.Component {
             <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}}>
                 <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    <AutoCard />
+                    <AutoCard collectionId={this.props.collectionId} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {this.doneAdding(this)}} color="primary">

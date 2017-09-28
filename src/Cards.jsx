@@ -11,7 +11,9 @@ class Cards extends React.Component {
         return (
             <div className={`${classes.card_container} container`}>
                 {this.props.context.cardData.map((card) => (
-                    <CardGlance key={uuid()} collectionId={this.props.context.collectionId} name={card.name} image_uri={card.image_uri} usd={card.usd} code={card.set} num={card.collector_number} />
+                    <CardGlance key={uuid()} collectionId={this.props.context.collectionId} name={card.name}
+                    normal_qty={card.normal_qty} foil_qty={card.foil_qty} num={card.collector_number}
+                    image_uri={card.card_faces ? card.card_faces[0].image_uris.small : (card.image_uris ? card.image_uris.small : card.image_uri)} usd={card.usd} code={card.set} />
                 ))}
             </div>
         );
