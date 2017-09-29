@@ -94,17 +94,20 @@ class AutoCard extends React.Component {
     };
 
     setChosen(ctx, cardId) {
+        let cardData = {
+            cardId: cardId,
+            normalQty: 1,
+            foilQty: 2
+        };
         fetch(new Request(`/collections/${this.props.collectionId}/add`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                cardId: cardId,
-                normalQty: 1,
-                foilQty: 2
-            })
-        }));
+            body: JSON.stringify(cardData)
+        })).then(() => {
+            ctx.props.onAdd(cardData);
+        });
         ctx.clearSets(ctx);
     }
     

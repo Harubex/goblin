@@ -10,6 +10,7 @@ import Typography from "material-ui/Typography";
 import Collapse from "material-ui/transitions/Collapse";
 import ModeEditIcon from "material-ui-icons/ModeEdit";
 import AddIcon from "material-ui-icons/Add";
+import LayersClearIcon from "material-ui-icons/LayersClear";
 import ExpandMoreIcon from "material-ui-icons/ExpandMore";
 import DeleteIcon from "material-ui-icons/Delete";
 import Tooltip from "material-ui/Tooltip";
@@ -68,7 +69,9 @@ class CollectionCard extends React.Component {
             expanded: false,
             deleteDialogOpen: false,
             deleted: false,
-            addDialogOpen: false
+            addDialogOpen: false,
+            collectionUnique: 0,
+            collectionTotal: this.props.size
         };
     }
 
@@ -117,7 +120,7 @@ class CollectionCard extends React.Component {
                     <a className={classes.cardInfo} href={`/collections/${this.props.id}`}>
                         <CardHeader className={classes.title} 
                             title={this.props.name}
-                            subheader={`${this.props.size} Card${this.props.size != 1 ? "s" : ""}`} />
+                            subheader={`${this.state.collectionTotal} Card${this.state.collectionTotal != 1 ? "s" : ""}`} />
                         <CardContent>
                             <Typography type="body1" className={classes.pos}>
                                 
@@ -126,7 +129,7 @@ class CollectionCard extends React.Component {
                     </a>
                     <CardActions className={classes.actions}>
                         <Tooltip className={classes.tooltip} placement="bottom" title="Add cards">
-                            <IconButton className={classes.button} onClick={() => {this.addToCollection(this)}}>
+                            <IconButton color="accent" className={classes.button} onClick={() => {this.addToCollection(this)}}>
                                 <AddIcon />
                             </IconButton>
                         </Tooltip>
@@ -138,6 +141,11 @@ class CollectionCard extends React.Component {
                         <Tooltip className={classes.tooltip} placement="bottom" title="Delete collection">
                             <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
                                 <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip className={classes.tooltip} placement="bottom" title="Clear all cards from collection">
+                            <IconButton color="primary" className={classes.button} onClick={() => {this.clearCollection(this)}}>
+                                <LayersClearIcon />
                             </IconButton>
                         </Tooltip>
                     </CardActions>
@@ -157,7 +165,9 @@ class CollectionCard extends React.Component {
                 <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} onClose={() => this.setState({
                     addDialogOpen: false
                 })} onAdd={(card) => {
-                    
+                    this.setState({
+                        collectionTotal: this.state.collectionTotal + card.normalQty + card.foilQty
+                    });
                 }}/>
             </div>
         );

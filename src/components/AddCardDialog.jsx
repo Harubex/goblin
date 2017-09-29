@@ -24,13 +24,13 @@ class AddCardDialog extends React.Component {
             <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}}>
                 <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    <AutoCard collectionId={this.props.collectionId} />
+                    <AutoCard collectionId={this.props.collectionId} onAdd={this.props.onAdd} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {this.doneAdding(this)}} color="primary">
                         {this.props.cancelText || "Cancel"}
                     </Button>
-                    <Button onClick={() => {this.doneAdding(this); this.props.onAdd(this);}} color="primary">
+                    <Button onClick={() => {this.doneAdding(this)}} color="primary">
                         {this.props.doneText || "Done"}
                     </Button>
                 </DialogActions>
