@@ -68,6 +68,7 @@ class CollectionCard extends React.Component {
         this.state = {
             expanded: false,
             deleteDialogOpen: false,
+            removeDialogOpen: false,
             deleted: false,
             addDialogOpen: false,
             collectionUnique: 0,
@@ -90,6 +91,10 @@ class CollectionCard extends React.Component {
     editCollection(ctx) {
     }
 
+    confirmRemove(ctx) {
+
+    }
+
     deleteCollection(ctx) {
         ctx.setState({
             deleteDialogOpen: true
@@ -98,8 +103,22 @@ class CollectionCard extends React.Component {
 
     closeDialog(ctx) {
         ctx.setState({
+            removeDialogOpen: false,
             deleteDialogOpen: false
         });
+    }
+
+    removeCards(ctx) {
+        ctx.setState({
+            removeDialogOpen: true
+        });
+    }
+
+    confirmRemove(ctx) {
+        fetch(new Request(`/collections/${ctx.props.id}/cards`, {
+            method: "DELETE"
+        }));
+        ctx.closeDialog(ctx);
     }
 
     confirmDelete(ctx) {
@@ -144,12 +163,31 @@ class CollectionCard extends React.Component {
                             </IconButton>
                         </Tooltip>
                         <Tooltip className={classes.tooltip} placement="bottom" title="Clear all cards from collection">
-                            <IconButton color="primary" className={classes.button} onClick={() => {this.clearCollection(this)}}>
+                            <IconButton color="primary" className={classes.button} onClick={() => {this.removeCards(this)}}>
                                 <LayersClearIcon />
                             </IconButton>
                         </Tooltip>
                     </CardActions>
                 </Card>
+                <Dialog open={this.state.removeDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
+                    <DialogTitle>Remove cards from {this.props.name}</DialogTitle>
+                    <DialogContent>Are you sure you want to remove all cards from this collection?</DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {this.closeDialog(this)}} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={() => {this.confirmRemove(this)}} color="accent">
+                            Remove
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} onClose={() => this.setState({
+                    addDialogOpen: false
+                })} onAdd={(card) => {
+                    this.setState({
+                        collectionTotal: this.state.collectionTotal + card.normalQty + card.foilQty
+                    });
+                }}/>
                 <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Delete {this.props.name}</DialogTitle>
                     <DialogContent>Are you sure you want to delete this collection?</DialogContent>

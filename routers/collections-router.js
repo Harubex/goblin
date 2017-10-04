@@ -33,6 +33,20 @@ router.delete("/:collectionId", (req, resp) => {
     });
 });
 
+router.delete("/:collectionId/cards", (req, resp) => {
+    conn.query(`
+        delete from collection_card where collection_id = ?;
+    `, [req.params.collectionId], (err, res) => {
+        if (err) {
+            debug(err);
+        } else {
+            resp.json({
+                message: `Cards from collection (${req.params.collectionId}) deleted successfully.`
+            });
+        }
+    });
+});
+
 router.get("/:collectionId", (req, resp) => {
     conn.query(`select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
         left join collection_card cc on cc.collection_id = co.id 
@@ -86,9 +100,10 @@ router.post("/add", (req, resp) => {
 router.post("/:collectionId/add", (req, resp) => {
     let body = req.body || {};
     conn.query(`insert into collection_card (collection_id, card_id, normal_qty, foil_qty)  
-            select ?, c.id, ?, ? from cards c 
-            left join scryfall_cards sc on sc.id = c.scryfall_id 
-            where sc.id = ?;`, [req.params.collectionId, body.normalQty, body.foilQty, body.cardId], (err, data) => {
+        (select ?, c.id, ?, ? from cards c left join scryfall_cards sc on sc.id = c.scryfall_id where sc.id = ?) on duplicate key update 
+        normal_qty = normal_qty + ?, foil_qty = foil_qty + ?;`, 
+        [req.params.collectionId, body.normalQty, body.foilQty, body.cardId, body.normalQty, body.foilQty], 
+    (err, data) => {
         if (err) {
             debug(err);
         } else {
