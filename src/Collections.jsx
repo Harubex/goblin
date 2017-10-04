@@ -27,7 +27,8 @@ class Collections extends React.Component {
         fetch(new Request(`/collections/add`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                credentials: "same-origin"
             },
             body: JSON.stringify({
                 collectionName: ctx.state.collectionName

@@ -14,7 +14,7 @@ router.get("/", (req, resp) => {
         if (err) {
             debug("Unable to fetch collections for user", req.session);
         }
-        send(resp, data);
+        send(req, resp, data);
     });
 });
 
@@ -58,7 +58,7 @@ router.get("/:collectionId", (req, resp) => {
             addCardToSet(sets, res[i]);
         }
         conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
-            send(resp, {collectionId: req.params.collectionId, sets: setData, ownedCards: sets});
+            send(req, resp, {collectionId: req.params.collectionId, sets: setData, ownedCards: sets});
         });
     });
 });
@@ -70,7 +70,7 @@ router.get("/:collectionId/:setCode", (req, resp) => {
         if (err) {
             debug(err);
         } else {
-            send(resp, {
+            send(req, resp, {
                 collectionId: req.params.collectionId,
                 cardData: data
             });

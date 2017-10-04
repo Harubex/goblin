@@ -43,7 +43,8 @@ class AddCardDialog extends React.Component {
         fetch(new Request(`/collections/${this.props.collectionId}/add`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                credentials: "same-origin"
             },
             body: JSON.stringify(cardData)
         })).then(() => {

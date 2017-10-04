@@ -39,13 +39,15 @@ class HeaderBar extends React.Component {
                                     <Button color="contrast">{this.props.currentUser}</Button>
                                 </a>
                             ) : (
-                                <a className={classes.menuLink} href="/login">
-                                    <Button color="contrast">Login</Button>
-                                </a>
+                                <div>
+                                    <a className={classes.menuLink} href="/user/login">
+                                        <Button color="contrast">Login</Button>
+                                    </a>
+                                    <a className={classes.menuLink} href="/user/register">
+                                        <Button color="contrast">Register</Button>
+                                    </a>
+                                </div>
                             )}
-                            <a className={classes.menuLink} href="/register">
-                                <Button color="contrast">Register</Button>
-                            </a>
                         </div>
                     </Toolbar>
                 </AppBar>

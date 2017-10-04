@@ -12,7 +12,7 @@ let cache = [];
 router.get("/:set/:code", (req, resp) => {
     // Check if card data is cached.
     if (cache[req.params.set] && cache[req.params.set][req.params.code]) {
-        send(resp, {
+        send(req, resp, {
             from: req.query.from,
             card: cache[req.params.set][req.params.code]
         });
@@ -26,7 +26,7 @@ router.get("/:set/:code", (req, resp) => {
                     cache[req.params.set] = [];
                 }
                 cache[req.params.set][req.params.code] = card;
-                send(resp, {
+                send(req, resp, {
                     from: req.query.from,
                     card: card
                 });

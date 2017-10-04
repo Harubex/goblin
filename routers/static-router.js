@@ -3,7 +3,8 @@ const path = require("path");
 
 const htmlPath = path.join(__dirname, "..", "src", "index.html");
 
-module.exports = function send(resp, data) {
+module.exports = function send(req, resp, data) {
+    require("debug")("test")(req.session);
     fs.readFile(htmlPath, "utf8", (err, fileData) => {
         if (err) {
             debug("Unable to fetch html.");

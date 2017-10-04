@@ -36,7 +36,13 @@ class AutoCard extends React.Component {
     }
 
     fetchCards(input, cb) {
-        fetch(`/card/autocomplete?name=${input}`).then((resp) => resp.json()).then((json) => {
+        fetch(new Request(`/card/autocomplete?name=${input}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                credentials: "same-origin"
+            }
+        })).then((resp) => resp.json()).then((json) => {
             cb(json);
         });
     }
@@ -67,20 +73,14 @@ class AutoCard extends React.Component {
           );
     }
 
-    renderSuggestion(suggestion, {query, isHighlighted}) {
-        /*
-        return (
-            <div>
-                <p>{suggestion.name}</p>
-                <div>{suggestion.type_line || frontFace.type_line} <ManaCost sym={suggestion.mana_cost || frontFace.mana_cost} /></div>
-            </div>
-        );*/
+    renderSuggestion(ctx, suggestion, query, isHighlighted) {
+        const classes = ctx.props.classes;
         let frontFace = suggestion.card_faces ? suggestion.card_faces[0] : suggestion;
         const matches = match(frontFace.name, query);
         const parts = parse(frontFace.name, matches);
       
         return (
-          <MenuItem style={{display: "block", height: "50px", lineHeight: 0}} selected={isHighlighted} component="div">
+          <MenuItem className={classes.suggestionItem} selected={isHighlighted} component="div">
             <p>
               {parts.map((part, index) => {
                 return part.highlight ? (
@@ -115,7 +115,13 @@ class AutoCard extends React.Component {
 
     getSuggestionValue(ctx, suggestion) {
         let name = suggestion.name;
-        fetch(`/card/sets?name=${name}`).then((resp) => resp.json()).then((json) => {
+        fetch(new Request(`/card/sets?name=${name}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                credentials: "same-origin"
+            }
+        })).then((resp) => resp.json()).then((json) => {
             let defaultId = json[0].id
             ctx.setState({
                 cardId: defaultId,
@@ -198,7 +204,7 @@ class AutoCard extends React.Component {
                     onSuggestionsClearRequested={() => this.clearSuggestions(this)}
                     getSuggestionValue={(value) => this.getSuggestionValue(this, value)}
                     renderSuggestionsContainer={this.renderSuggestionsContainer}
-                    renderSuggestion={this.renderSuggestion}
+                    renderSuggestion={(suggestion, {query, isHighlighted}) => this.renderSuggestion(this, suggestion, query, isHighlighted)}
                     inputProps={props}
                 />
                 <Dialog open={this.state.sets.length > 0} onRequestClose={() => this.clearSets(this)}>
@@ -244,6 +250,11 @@ export default withStyles((theme) => ({
         listStyleType: "none",
         padding: 0,
         margin: 0
+    },
+    suggestionItem: {
+        display: "block",
+        height: "50px", 
+        lineHeight: 0
     },
     cardOption: {
         display: 'block',

@@ -31,11 +31,13 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
-    secret: "sample text",
+    secret: "sampletext",
     name: "goblin-cookie",
     store: new MySQLStore(JSON.parse(fs.readFileSync("credentials/db-creds.json", "utf8"))),
-    genid: uuid,
-    secure: cookieSecure
+   // genid: uuid,
+    secure: false,
+    resave: false,
+    saveUninitialized: false
 }));
 app.use("/card", require("./routers/card-router"));
 app.use("/user", require("./routers/user-router"));
