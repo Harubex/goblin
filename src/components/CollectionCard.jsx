@@ -117,7 +117,7 @@ class CollectionCard extends React.Component {
     confirmRemove(ctx) {
         fetch(new Request(`/collections/${ctx.props.id}/cards`, {
             method: "DELETE",
-            credentials: "same-origin"
+            credentials: "include"
         }));
         ctx.closeDialog(ctx);
     }
@@ -125,7 +125,7 @@ class CollectionCard extends React.Component {
     confirmDelete(ctx) {
         fetch(new Request(`/collections/${ctx.props.id}`, {
             method: "DELETE",
-            credentials: "same-origin"
+            credentials: "include"
         }));
         ctx.setState({
             deleted: true

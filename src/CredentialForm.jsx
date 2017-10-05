@@ -29,7 +29,7 @@ class CredentialForm extends React.Component {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                credentials: "same-origin"
+                credentials: "include"
             },
             body: JSON.stringify(ctx.state)
         })).then((resp) => {

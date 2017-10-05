@@ -40,7 +40,7 @@ class AutoCard extends React.Component {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                credentials: "same-origin"
+                credentials: "include"
             }
         })).then((resp) => resp.json()).then((json) => {
             cb(json);
@@ -119,7 +119,7 @@ class AutoCard extends React.Component {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                credentials: "same-origin"
+                credentials: "include"
             }
         })).then((resp) => resp.json()).then((json) => {
             let defaultId = json[0].id

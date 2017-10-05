@@ -28,7 +28,7 @@ class Collections extends React.Component {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                credentials: "same-origin"
+                credentials: "include"
             },
             body: JSON.stringify({
                 collectionName: ctx.state.collectionName
