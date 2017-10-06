@@ -75,8 +75,7 @@ class CredentialForm extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <form className={classes.container} 
-                    onSubmit={(ev) => this.props.formType == "register" ? this.onRegister(this, ev) : this.onLogin(this, ev)}>
+                <form className={classes.container} method="post" action="">
                     <TextField autoFocus className={classes.textField} name="username" label="Username"
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
                     <TextField className={classes.textField} name="password" label="Password" 

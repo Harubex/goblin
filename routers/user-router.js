@@ -7,12 +7,16 @@ const send = require("./static-router");
 const router = express.Router();
 const conn = new DBConnection();
 
-router.get("/login", (req, resp) => {
-    send(req, resp, {});
-});
+router.get("/login", send);
+router.get("/register", send);
 
-router.get("/register", (req, resp) => {
-    send(req, resp, {});
+router.get("/logout", (req, resp) => {
+    req.session.destroy((err) => {
+        if (err) {
+            debug(err);
+        }
+        resp.redirect("back");
+    });
 });
 
 router.post("/login", (req, resp) => {
@@ -36,50 +40,14 @@ router.post("/login", (req, resp) => {
                     } else if (!passwordValid) {
                         resp.status(400).send("The given password is invalid.");
                     } else {
-                        req.session.userid = data[0].id;
-                        req.session.username = body.username;
-                        req.session.save((err) => {
-                            if (err) {
-                                debug(err);
-                            } else {
-                                resp.status(200).send(data[0]);
-                            }
-                        });
+                        addSessionData(req, {
+                            userid: data[0].id,
+                            username: body.username
+                        }, () => resp.redirect("/collections"));
                     }
                 });
             }
         });
-       /* docClient.scan({
-            TableName: "Accounts",
-            FilterExpression : "username = :username",
-            ExpressionAttributeValues : {":username" : req.body.username}
-        }, (err, data) => {
-            if (err) {
-                resp.status(500).send(err.message);
-            } else {
-                 if (data.Count === 1) {
-                     bcrypt.compare(req.body.password, data.Items[0].password, (err, res) => {
-                        if (err) {
-                            resp.status(500).send(err.message);
-                        } else if (!res) {
-                            resp.status(500).send("Incorrect password.");
-                        } else {
-                            req.session.userid = data.Items[0].id;
-                            req.session.username = req.body.username;
-                            req.session.save((err) => {
-                                if (err) {
-                                    debug(err);
-                                } else {
-                                    resp.status(200).send(data.Items[0]);
-                                }
-                            })
-                        }
-                    });
-                 } else {
-                     resp.status(500).send("No user with this username found.");
-                 }
-            }
-        });*/
     }
 });
 
@@ -102,19 +70,15 @@ router.post("/register", (req, resp) => {
                     if (err) {
                         resp.status(500).send(err.message);
                     } else {
-                        conn.query("insert into users (name, password) values (?, ?)", [body.username, hash], (err, data) => {
+                        conn.query("insert into users (name, password) values (?, ?); select * from users where name = ?;", 
+                        [body.username, hash, body.username], (err, data) => {
                             if (err) {
                                 resp.status(500).send(err.message);
                             } else {
-                                req.session.userid = data[0].id;
-                                req.session.username = body.username;
-                                req.session.save((err) => {
-                                    if (err) {
-                                        debug(err);
-                                    } else {
-                                        resp.status(200).send(data[0]);
-                                    }
-                                });
+                                addSessionData(req, {
+                                    userid: data[1][0].id,
+                                    username: body.username
+                                }, () => resp.redirect("/collections"));
                             }
                         });
                     }
@@ -123,5 +87,18 @@ router.post("/register", (req, resp) => {
         });
     }
 });
+
+function addSessionData(req, data, cb) {
+    for (let key in data) {
+        req.session[key] = data[key];
+    }
+    req.session.save((err) => {
+        if (err) {
+            debug(err);
+        } else {
+            cb();
+        }
+    });
+}
 
 module.exports = router;

@@ -8,7 +8,6 @@ const compression = require("compression");
 const mysql = require("mysql");
 const uuid = require("uuid/v4");
 const session = require("express-session");
-const bodyParser = require("body-parser");
 const DynamoStore = require("connect-dynamodb")({session: session});
 
 const app = express();
@@ -29,8 +28,12 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(compression());
 app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({
+    extended: false 
+}));
+app.use(express.json({
+    strict: false
+}));
 app.use(session({
     secret: "sampletext123",
     name: "goblin-cookie",
@@ -39,15 +42,18 @@ app.use(session({
         AWSConfigJSON: JSON.parse(fs.readFileSync(path.join(__dirname, "credentials/dynamo-creds.json"), "utf8"))
     }),
     genid: uuid,
-    secure: cookieSecure
+    secure: cookieSecure,
+    resave: false,
+    saveUninitialized: false
 }));
 app.use("/card", require("./routers/card-router"));
 app.use("/user", require("./routers/user-router"));
 app.use("/api", require("./routers/api-router"));
 app.use("/collections", require("./routers/collections-router"));
-app.use(express.static("build"));
-app.use(express.static("static"));
+app.use(express.static("./build"));
+app.use(express.static("./static"));
 app.use(require("./middleware/404"));
+app.use(require("./middleware/error"));
 
 let server = app;
 if (process.env.NODE_ENV !== "production") {

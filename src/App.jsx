@@ -26,13 +26,9 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <HeaderBar currentUser={this.state.currentUser} />
-                <Route path="/user/login" render={() => <CredentialForm formType="login" context={this.props.context} 
-                    onLogged={(state) => this.onLogged(this, state)} />} 
-                />
-                <Route path="/user/register" render={() => <CredentialForm formType="register" context={this.props.context} 
-                    onLogged={(state) => this.onLogged(this, state)} />} 
-                />
+                <HeaderBar session={this.props.session} />
+                <Route path="/user/login" render={() => <CredentialForm formType="login" context={this.props.context} />} />
+                <Route path="/user/register" render={() => <CredentialForm formType="register" context={this.props.context} />} />
                 <Route path="/card/:set/:code" render={() => <CardProfile context={this.props.context} />} />
                 <Route path="/collections" exact render={() => <Collections collectionData={this.props.context} />} />
                 <Route path="/collections/:id" exact render={() => <Collection context={this.props.context} />} />

@@ -3,7 +3,7 @@ const path = require("path");
 const debug = require("debug")("test");
 const htmlPath = path.join(__dirname, "..", "src", "index.html");
 
-module.exports = function send(req, resp, data) {
+module.exports = (req, resp, data) => {
     fs.readFile(htmlPath, "utf8", (err, fileData) => {
         if (err) {
             debug("Unable to fetch html.");
@@ -18,12 +18,18 @@ module.exports = function send(req, resp, data) {
                         if (err) {
                             debug(err);
                         }
-                        resp.send(fileData.replace("{state}", JSON.stringify(data)));
+                        sendData(resp, fileData, data, req.session);
                     });
                 } else {
-                    resp.send(fileData.replace("{state}", JSON.stringify(data)));
+                    sendData(resp, fileData, data, req.session);
                 }
             })
         }
     });
+}
+
+function sendData(resp, fileData, serverState, sessionState) {
+    fileData = fileData.replace("{state}", JSON.stringify(serverState || {}));
+    fileData = fileData.replace("{session}", JSON.stringify(sessionState || {}));
+    resp.send(fileData);
 }
