@@ -55,11 +55,11 @@ class AutoCard extends React.Component {
             placeholder={placeholder}
             value={value}
             inputRef={ref}
-            InputProps={Object.assign({
+            InputProps={Object.assign(inputProps, {
                 classes: {
                     input: classes.textField,
                 }
-            }, inputProps)}
+            })}
         />;
     }
 
@@ -122,11 +122,14 @@ class AutoCard extends React.Component {
                 credentials: "include"
             }
         })).then((resp) => resp.json()).then((json) => {
-            let defaultId = json[0].id
+            let defaultId = json[0].id;
             ctx.setState({
                 cardId: defaultId,
-                sets: json
-            });      
+                sets: json.length < 1 ? json : []
+            });
+            if (json.length == 1) {
+                ctx.setChosen(ctx, json[0].id, json[0].set_name)
+            }
             ctx.props.onAdd(defaultId);
         });
         return name;
@@ -181,15 +184,18 @@ class AutoCard extends React.Component {
     render() {
         const classes = this.props.classes;
         const props = {
+            id: this.state.id,
             placeholder: "Enter a card name",
             value: this.state.value,
-            classes: classes,
+            classes: {
+                textField: classes.textField
+            },
             autoFocus: true,
             onChange: (ev, {newValue}) => this.onInputChange(this, "value", newValue)
         };
         return (
             <div>
-                <Autosuggest id={this.state.id}
+                <Autosuggest 
                     theme={{
                         container: classes.container,
                         suggestionsContainerOpen: classes.suggestionsContainerOpen,

@@ -14,8 +14,8 @@ class AddCardDialog extends React.Component {
             open: this.props.addDialogOpen,
             autoCardId: uuid(),
             cardId: "",
-            normalQty: 0,
-            foilQty: 0,
+            normalQty: "",
+            foilQty: "",
         };
     }
 
@@ -37,8 +37,8 @@ class AddCardDialog extends React.Component {
     addCards(ctx) {
         let cardData = {
             cardId: ctx.state.cardId,
-            normalQty: ctx.state.normalQty,
-            foilQty: ctx.state.foilQty
+            normalQty: ctx.state.normalQty || 0,
+            foilQty: ctx.state.foilQty || 0
         };
         fetch(new Request(`/collections/${this.props.collectionId}/add`, {
             method: "POST",
@@ -50,14 +50,23 @@ class AddCardDialog extends React.Component {
         })).then(() => {
             ctx.props.onAdd(cardData);
             ctx.onInputChange(ctx, "cardId", "");
-            document.getElementById("react-autowhatever-" + ctx.state.autoCardId).focus();
+            let ele = document.getElementById(ctx.state.autoCardId);
+            ele.focus();
+            ele.value = "";
         });
+    }
+
+    keyPressed(ctx, ev) {
+        if (ev.keyCode === 13) { // enter
+            ctx.addCards(ctx);
+        }
     }
 
     render() {
         const classes = this.props.classes;
         return (
-            <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}} ignoreBackdropClick>
+            <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}} ignoreBackdropClick 
+            onKeyDown={(ev) => this.keyPressed(this, ev)}>
                 <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <AutoCard id={this.state.autoCardId} collectionId={this.props.collectionId} 

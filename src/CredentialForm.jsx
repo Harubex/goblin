@@ -78,9 +78,9 @@ class CredentialForm extends React.Component {
                 <form className={classes.container} method="post" action="">
                     <TextField autoFocus className={classes.textField} name="username" label="Username"
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
-                    <TextField className={classes.textField} name="password" label="Password" 
+                    <TextField className={classes.textField} type="password" name="password" label="Password" 
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
-                    <Button className={classes.inputButton} type="submit" color="primary">Login</Button>
+                    <Button className={classes.inputButton} type="submit" raised dense color="primary">Login</Button>
                 </form>
             </div>
         );
@@ -90,7 +90,9 @@ class CredentialForm extends React.Component {
 export default withStyles((theme) => ({
     container: {
         display: "flex",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        margin: "0 auto",
+        width: "40%"
     },
     textField: {
         color: "white",
@@ -98,6 +100,6 @@ export default withStyles((theme) => ({
         marginRight: theme.spacing.unit
     },
     inputButton: {
-        color: theme.palette.primary[200]
+        margin: 10
     }
 }))(CredentialForm);

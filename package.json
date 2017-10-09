@@ -26,7 +26,7 @@
     "helmet": "^3.8.2",
     "is-json": "^2.0.1",
     "keyrune": "^3.1.4",
-    "material-ui": "1.0.0-beta.13",
+    "material-ui": "1.0.0-beta.16",
     "material-ui-icons": "^1.0.0-beta.15",
     "mysql": "^2.15.0",
     "prop-types": "^15.6.0",

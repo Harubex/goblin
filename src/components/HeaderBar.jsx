@@ -37,7 +37,7 @@ class HeaderBar extends React.Component {
         const session = this.props.session || {};
         return (
             <div className={classes.root}>
-                <AppBar position="static">
+                <AppBar position="fixed">
                     <Toolbar disableGutters>
                         <IconButton className={classes.menuButton} color="contrast">
                             <HomeIcon />

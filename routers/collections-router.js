@@ -64,9 +64,10 @@ router.get("/:collectionId", (req, resp) => {
 });
 
 router.get("/:collectionId/:setCode", (req, resp) => {
-    conn.query(`select sc.collector_number, sc.card_faces, sc.usd, ifnull(cc.normal_qty, 0) as normal_qty, ifnull(cc.foil_qty, 0) as foil_qty, sc.name, sc.image_uris 
+    conn.query(`select sc.collector_number, sc.card_faces, sc.usd, ifnull(cc.normal_qty, 0) as normal_qty, 
+            ifnull(cc.foil_qty, 0) as foil_qty, sc.name, sc.image_uris, sc.set 
             from magical.scryfall_cards sc left join cards c on c.scryfall_id = sc.id left join collection_card cc on cc.card_id = c.id
-            where sc.\`set\` = ? order by sc.collector_number;`, [req.params.setCode], (err, data) => {
+            where sc.\`set\` = ? order by cast(sc.collector_number as unsigned);`, [req.params.setCode], (err, data) => {
         if (err) {
             debug(err);
         } else {

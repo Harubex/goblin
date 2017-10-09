@@ -1,5 +1,9 @@
 body {
-    background-color: darkslategrey;
+    background-color: rgb(240, 240, 240);
+}
+
+#base-container {
+    padding-top: 75px;
 }
 
 .mana-cost {

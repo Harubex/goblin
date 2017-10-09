@@ -9,13 +9,21 @@ class CardImage extends React.Component {
             url: "/cardback.png"
         };
     }
+
+    imageLoaded(ctx) {
+        ctx.setState({
+            url: ctx.props.url
+        });
+    }
               
     render() {
         styles.cardImage.width = this.props.width;
         const classes = this.props.classes;
         return (
             <div className="card-image-container">
-                <img className={`${this.props.className} card-image`} src={this.props.url} style={{width: this.props.width, background: "url('/cardback.png') no-repeat"}} />
+                <img className={`${this.props.className} card-image`} 
+                onLoad={(ev) => this.imageLoaded(this, this.props.url)} src={this.state.url} 
+                style={{width: this.props.width}} />
             </div>
         );
     }
