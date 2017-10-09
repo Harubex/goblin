@@ -8,6 +8,7 @@ import Toolbar from "material-ui/Toolbar";
 import IconButton from "material-ui/IconButton";
 import Typography from "material-ui/Typography";
 import Menu, {MenuItem} from "material-ui/Menu";
+import AutoCard from "./AutoCard";
 
 class HeaderBar extends React.Component { 
     constructor(props) {

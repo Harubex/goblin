@@ -10,8 +10,11 @@ class CredentialForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false
-        }
+            error: this.props.context ? this.props.context.error : false,
+            registerForm: this.props.formType == "register"
+        } /* Seperate error text from dialog open state to 
+          avoid user seeing text disappear before the dialog does. */
+        this.state.dialogOpen = !!this.state.error;
     }
 
     onLogin(ctx, ev) {
@@ -22,30 +25,6 @@ class CredentialForm extends React.Component {
         ctx.onSubmit(ctx, ev, "register");
     }
 
-    onSubmit(ctx, ev, type) {
-        ev.preventDefault();
-        document.body.classList.add("waiting");
-        fetch(new Request(`/user/${type}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                credentials: "include"
-            },
-            body: JSON.stringify(ctx.state)
-        })).then((resp) => {
-            resp.text().then((msg) => {
-                if (resp.status >= 400) {
-                    ctx.setState({
-                        error: msg
-                    });
-                } else {
-                    ctx.props.onLogged(ctx.state);
-                    window.location.replace("/collections");
-                }
-            });
-        });
-    }
-
     onInputChange(ctx, ev) {
         ctx.setState({
             [ev.target.name]: ev.target.value
@@ -54,7 +33,7 @@ class CredentialForm extends React.Component {
 
     clearError(ctx) {
         ctx.setState({
-            error: false
+            dialogOpen: false
         });
     }
 
@@ -62,8 +41,8 @@ class CredentialForm extends React.Component {
         const classes = this.props.classes;
         return (
             <div>
-                <Dialog title="Error" modal={false} open={!!this.state.error} onRequestClose={() => this.clearError(this)}>
-                    <DialogTitle>{"Unable to log in"}</DialogTitle>
+                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onRequestClose={() => this.clearError(this)}>
+                    <DialogTitle>{`Unable to ${this.props.formType}`}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             {this.state.error}
@@ -75,11 +54,15 @@ class CredentialForm extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <form className={classes.container} method="post" action="">
+                <form className={classes.container} method="post" action="" onSubmit={this.onSubmit}>
                     <TextField autoFocus className={classes.textField} name="username" label="Username"
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
                     <TextField className={classes.textField} type="password" name="password" label="Password" 
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
+                    {this.state.registerForm && 
+                        <TextField className={classes.textField} type="password" name="confirm" label="Confirm Password" 
+                            fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
+                    }
                     <Button className={classes.inputButton} type="submit" raised dense color="primary">Login</Button>
                 </form>
             </div>

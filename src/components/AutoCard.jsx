@@ -94,7 +94,10 @@ class AutoCard extends React.Component {
                 );
               })}
             </p>
-            <div>{suggestion.type_line || frontFace.type_line} <ManaCost sym={suggestion.mana_cost || frontFace.mana_cost} /></div>
+            <div>
+                <div className={classes.typeLine}>{suggestion.type_line || frontFace.type_line}</div>
+                <ManaCost sym={suggestion.mana_cost || frontFace.mana_cost} />
+            </div>
           </MenuItem>
         );
     }
@@ -283,5 +286,10 @@ export default withStyles((theme) => ({
     },
     textField: {
         width: "100%"
+    },
+    typeLine: {
+        display: "inline-block",
+        paddingRight: "5px",
+        lineHeight: "24px"
     }
 }))(AutoCard);
