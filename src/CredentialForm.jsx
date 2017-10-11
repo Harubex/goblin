@@ -12,17 +12,9 @@ class CredentialForm extends React.Component {
         this.state = {
             error: this.props.context ? this.props.context.error : false,
             registerForm: this.props.formType == "register"
-        } /* Seperate error text from dialog open state to 
-          avoid user seeing text disappear before the dialog does. */
+        };
+        // Seperate error text from dialog open state to avoid user seeing text disappear before the dialog does.
         this.state.dialogOpen = !!this.state.error;
-    }
-
-    onLogin(ctx, ev) {
-        ctx.onSubmit(ctx, ev, "login");
-    }
-
-    onRegister(ctx, ev) {
-        ctx.onSubmit(ctx, ev, "register");
     }
 
     onInputChange(ctx, ev) {
@@ -54,7 +46,7 @@ class CredentialForm extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <form className={classes.container} method="post" action="" onSubmit={this.onSubmit}>
+                <form className={classes.container} method="post" action="">
                     <TextField autoFocus className={classes.textField} name="username" label="Username"
                     fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
                     <TextField className={classes.textField} type="password" name="password" label="Password" 

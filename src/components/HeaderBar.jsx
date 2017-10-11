@@ -66,17 +66,22 @@ class HeaderBar extends React.Component {
                                     }} onRequestClose={() => this.closeMenu(this)}>
                                         <MenuItem onClick={this.handleRequestClose}>
                                             <a className={classes.menuLink} href="/account">
-                                                Account    
+                                                Account
                                             </a>
                                         </MenuItem>
                                         <MenuItem onClick={this.handleRequestClose}>
                                             <a className={classes.menuLink} href="/settings">
-                                                Settings    
+                                                Settings
+                                            </a>
+                                        </MenuItem>
+                                        <MenuItem onClick={this.handleRequestClose}>
+                                            <a className={classes.menuLink} href="/collections/import">
+                                                Import/Export
                                             </a>
                                         </MenuItem>
                                         <MenuItem onClick={this.handleRequestClose}>
                                             <a className={classes.menuLink} href="/user/logout">
-                                                Logout    
+                                                Logout
                                             </a>
                                         </MenuItem>
                                     </Menu>

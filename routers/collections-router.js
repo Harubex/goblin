@@ -1,8 +1,12 @@
 const debug = require("debug")("server/collections");
 const express = require("express");
 const DBConnection = require("../data/db-conn");
+const importFiles = require("../data/import");
 const send = require("./static-router");
 const scryfall = require("scryfall");
+var multer = require("multer");
+const storage = multer.memoryStorage();
+var upload = multer({storage});
 
 const router = express.Router();
 const conn = new DBConnection();
@@ -10,11 +14,40 @@ const conn = new DBConnection();
 router.get("/", (req, resp) => {
     conn.query(`select c.id, c.name, count(cc.card_id) as size from collections c 
         left join collection_card cc on cc.collection_id = c.id 
-        where c.user_id = ? group by c.id order by c.name`, {user_id: 1}, (err, data) => {
+        where c.user_id = ? group by c.id order by c.name`, [req.session.userid], (err, data) => {
         if (err) {
             debug("Unable to fetch collections for user", req.session);
         }
         send(req, resp, data);
+    });
+});
+
+router.get("/import", (req, resp) => {
+    conn.query(`select c.id, c.name, count(cc.card_id) as size from collections c 
+        left join collection_card cc on cc.collection_id = c.id 
+        where c.user_id = ? group by c.id order by c.name`, [req.session.userid], (err, data) => {
+        if (err) {
+            debug("Unable to fetch collections for user", req.session);
+        }
+        send(req, resp, {
+            collections: data
+        });
+    });
+});
+
+router.post("/import", upload.any(), (req, resp) => {
+    importFiles(req.body.collection, req.files, (msg) => {
+        conn.query(`select c.id, c.name, count(cc.card_id) as size from collections c 
+            left join collection_card cc on cc.collection_id = c.id 
+            where c.user_id = ? group by c.id order by c.name`, [req.session.userid], (err, data) => {
+            if (err) {
+                debug("Unable to fetch collections for user", req.session);
+            }      
+            send(req, resp, {
+                message: msg,
+                collections: data
+            });
+        });
     });
 });
 

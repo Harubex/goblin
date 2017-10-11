@@ -12,6 +12,7 @@ import Paper from 'material-ui/Paper';
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
 import ManaCost from "./ManaCost";
 import SetSymbol from "./SetSymbol";
+import fetch from "../utils/fetch";
 
 class AutoCard extends React.Component {
     constructor(props) {
@@ -36,13 +37,7 @@ class AutoCard extends React.Component {
     }
 
     fetchCards(input, cb) {
-        fetch(new Request(`/card/autocomplete?name=${input}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                credentials: "include"
-            }
-        })).then((resp) => resp.json()).then((json) => {
+        fetch(`/card/autocomplete?name=${input}`, "get", (err, json) => {
             cb(json);
         });
     }
@@ -118,13 +113,7 @@ class AutoCard extends React.Component {
 
     getSuggestionValue(ctx, suggestion) {
         let name = suggestion.name;
-        fetch(new Request(`/card/sets?name=${name}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                credentials: "include"
-            }
-        })).then((resp) => resp.json()).then((json) => {
+        fetch(`/card/sets?name=${name}`, "get", (err, json) => {
             let defaultId = json[0].id;
             ctx.setState({
                 cardId: defaultId,

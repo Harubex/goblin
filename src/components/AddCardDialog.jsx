@@ -5,6 +5,7 @@ import Button from "material-ui/Button";
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
 import TextField from "material-ui/TextField";
 import AutoCard from "./AutoCard";
+import fetch from "../utils/fetch";
 
 class AddCardDialog extends React.Component {
 
@@ -40,14 +41,7 @@ class AddCardDialog extends React.Component {
             normalQty: ctx.state.normalQty || 0,
             foilQty: ctx.state.foilQty || 0
         };
-        fetch(new Request(`/collections/${this.props.collectionId}/add`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                credentials: "include"
-            },
-            body: JSON.stringify(cardData)
-        })).then(() => {
+        fetch(`/collections/${this.props.collectionId}/add`, "post", cardData, (err, json) => {
             ctx.props.onAdd(cardData);
             ctx.onInputChange(ctx, "cardId", "");
             let ele = document.getElementById(ctx.state.autoCardId);

@@ -15,6 +15,7 @@ import ExpandMoreIcon from "material-ui-icons/ExpandMore";
 import DeleteIcon from "material-ui-icons/Delete";
 import Tooltip from "material-ui/Tooltip";
 import AddCardDialog from "./AddCardDialog";
+import fetch from "../utils/fetch";
 
 const styles = (theme) => ({
     card: {
@@ -115,18 +116,12 @@ class CollectionCard extends React.Component {
     }
 
     confirmRemove(ctx) {
-        fetch(new Request(`/collections/${ctx.props.id}/cards`, {
-            method: "DELETE",
-            credentials: "include"
-        }));
+        fetch(`/collections/${ctx.props.id}/cards`, "delete");
         ctx.closeDialog(ctx);
     }
 
     confirmDelete(ctx) {
-        fetch(new Request(`/collections/${ctx.props.id}`, {
-            method: "DELETE",
-            credentials: "include"
-        }));
+        fetch(`/collections/${ctx.props.id}`, "delete");
         ctx.setState({
             deleted: true
         });

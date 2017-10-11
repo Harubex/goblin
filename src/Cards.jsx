@@ -17,8 +17,10 @@ class Cards extends React.Component {
                         normal_qty={card.normal_qty} 
                         foil_qty={card.foil_qty} 
                         num={card.collector_number}
-                        image_uri={card.card_faces ? card.card_faces[0].image_uris.small : (card.image_uris ? card.image_uris.small : card.image_uri)} 
-                        usd={card.usd} 
+                        image_uri={card.card_faces ? card.card_faces[0].image_uris.small : (
+                            card.image_uris ? card.image_uris.small : card.image_uri
+                        )}
+                        usd={card.usd}
                         code={card.set} />
                 ))}
             </div>
