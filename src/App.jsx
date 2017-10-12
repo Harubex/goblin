@@ -34,8 +34,8 @@ export default class App extends React.Component {
                     <Route path="/card/:set/:code" render={() => <CardProfile context={this.props.context} />} />
                     <Route path="/collections" exact render={() => <Collections collectionData={this.props.context} />} />
                     <Route path="/collections/import" exact render={() => <ImportExport context={this.props.context} />} />
-                    <Route path="/collections/:id" render={() => <Collection context={this.props.context} />} />
-                    <Route path="/collections/:id/:code" render={() => <Cards context={this.props.context} />} />
+                    <Route path="/collections/:id" exact render={() => <Collection context={this.props.context} />} />
+                    <Route path="/collections/:id/:code" exact render={() => <Cards context={this.props.context} />} />
                 </Switch>
             </div>
         );

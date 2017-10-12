@@ -41,7 +41,8 @@ class Collections extends React.Component {
         return (
             <div className={`${classes.collection_container} container`}>
                 {this.state.collectionData.map((collection) => (
-                    <CollectionCard key={uuid()} id={collection.id} name={collection.name} size={collection.size} />
+                    <CollectionCard key={uuid()} id={collection.id} name={collection.name} 
+                        size={collection.size} total_value={collection.total_value} />
                 ))}
                 <DialogButton dialogTitle={"Create a new collection"} dialogContent={(
                     <div>

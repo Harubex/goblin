@@ -7,7 +7,6 @@ import Card, { CardHeader, CardActions, CardContent } from "material-ui/Card";
 import Button from "material-ui/Button";
 import IconButton from "material-ui/IconButton";
 import Typography from "material-ui/Typography";
-import Collapse from "material-ui/transitions/Collapse";
 import ModeEditIcon from "material-ui-icons/ModeEdit";
 import AddIcon from "material-ui-icons/Add";
 import LayersClearIcon from "material-ui-icons/LayersClear";
@@ -105,7 +104,8 @@ class CollectionCard extends React.Component {
     closeDialog(ctx) {
         ctx.setState({
             removeDialogOpen: false,
-            deleteDialogOpen: false
+            deleteDialogOpen: false,
+            addDialogOpen: false
         });
     }
 
@@ -115,8 +115,17 @@ class CollectionCard extends React.Component {
         });
     }
 
+    addCard(ctx, card) {
+        ctx.setState({
+            collectionTotal: parseInt(ctx.state.collectionTotal) + parseInt(card.normalQty) + parseInt(card.foilQty)
+        });
+    }
+
     confirmRemove(ctx) {
         fetch(`/collections/${ctx.props.id}/cards`, "delete");
+        ctx.setState({
+            collectionTotal: 0
+        });
         ctx.closeDialog(ctx);
     }
 
@@ -138,8 +147,8 @@ class CollectionCard extends React.Component {
                             title={this.props.name}
                             subheader={`${this.state.collectionTotal} Card${this.state.collectionTotal != 1 ? "s" : ""}`} />
                         <CardContent>
-                            <Typography type="body1" className={classes.pos}>
-                                
+                            <Typography type="body2" className={classes.pos}>
+                                {`Collection Value: $${this.props.total_value.toFixed(2)}`}
                             </Typography>
                         </CardContent>
                     </a>
@@ -178,13 +187,8 @@ class CollectionCard extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} onClose={() => this.setState({
-                    addDialogOpen: false
-                })} onAdd={(card) => {
-                    this.setState({
-                        collectionTotal: this.state.collectionTotal + card.normalQty + card.foilQty
-                    });
-                }}/>
+                <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} 
+                    onClose={() => this.closeDialog(this)} onAdd={(card) => this.addCard(this, card)}/>
                 <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Delete {this.props.name}</DialogTitle>
                     <DialogContent>Are you sure you want to delete this collection?</DialogContent>
@@ -197,13 +201,6 @@ class CollectionCard extends React.Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} onClose={() => this.setState({
-                    addDialogOpen: false
-                })} onAdd={(card) => {
-                    this.setState({
-                        collectionTotal: this.state.collectionTotal + card.normalQty + card.foilQty
-                    });
-                }}/>
             </div>
         );
     }
