@@ -60,12 +60,11 @@ class AutoCard extends React.Component {
 
     renderSuggestionsContainer(options) {
         const { containerProps, children } = options;
-        
-          return (
-            <Paper {...containerProps} square>
+        return (
+            <Paper id="suggestion-container" {...containerProps} square>
               {children}
             </Paper>
-          );
+        );
     }
 
     renderSuggestion(ctx, suggestion, query, isHighlighted) {

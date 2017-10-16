@@ -51,7 +51,7 @@ class AddCardDialog extends React.Component {
     }
 
     keyPressed(ctx, ev) {
-        if (ev.keyCode === 13) { // enter
+        if (ev.keyCode === 13 && !document.getElementById("suggestion-container")) { // enter
             ctx.addCards(ctx);
         }
     }
@@ -60,7 +60,7 @@ class AddCardDialog extends React.Component {
         const classes = this.props.classes;
         return (
             <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}} ignoreBackdropClick 
-            onKeyDown={(ev) => this.keyPressed(this, ev)}>
+                    onKeyDown={(ev) => this.keyPressed(this, ev)}>
                 <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <AutoCard id={this.state.autoCardId} collectionId={this.props.collectionId} 
