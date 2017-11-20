@@ -6,6 +6,9 @@
   "repository": "www.goaway.com",
   "author": "ryan",
   "license": "MIT",
+  "scripts": {
+      "build-data": "node ./data/rebuild.js"
+  },
   "dependencies": {
     "autosuggest-highlight": "^3.1.0",
     "babel-preset-env": "^1.6.0",

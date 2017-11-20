@@ -8,7 +8,7 @@ const conn = new DBConnection();
 
 let query, setQuery, cardQuery;
 
-module.exports.buildMtgJsonDB = function() {
+function buildMtgJsonDB() {
     fs.readFile("./data/mtgjson_sets_insert.sql", "utf8", (err, _setQuery) => {
         setQuery = _setQuery;
         fs.readFile("./data/mtgjson_cards_insert.sql", "utf8", (err, _cardQuery) => {
@@ -30,7 +30,7 @@ module.exports.buildMtgJsonDB = function() {
     });
 }
 
-module.exports.buildScryfallDB = function() {
+function buildScryfallDB() {
     conn.query("truncate scryfall_sets;", () => {
         fs.readFile("./data/scryfall_sets_insert.sql", "utf8", (err, setQuery) => {
             if (err) {
@@ -67,7 +67,7 @@ module.exports.buildScryfallDB = function() {
             });
         });
     });
-   /* conn.query("truncate scryfall_cards;", () => {
+    conn.query("truncate scryfall_cards;", () => {
         fs.readFile("./data/scryfall_cards_insert.sql", "utf8", (err, data) => {
             if (err) {
                 throw err;
@@ -79,7 +79,7 @@ module.exports.buildScryfallDB = function() {
                 });
             });
         });
-    });*/
+    });
 }
 
 function getScryfallCardPage(page, cb, _data = []) {
@@ -189,3 +189,16 @@ function buildFromMtgjson(setCodes, setIndex, allSetData, cb) {
         });
     }
 }
+
+function rebuildTables() {
+    fs.readFile("./data/rebuild.sql", "utf8", (err, query) => {
+        if (err) {
+            throw new Error(`Unable to create tables: ${err.message}.`);
+        } else {
+            buildMtgJsonDB();
+            buildScryfallDB();
+        }
+    });
+}
+
+rebuildTables();
