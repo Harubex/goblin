@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `scryfall_cards` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `scryfall_sets` (
+CREATE TABLE IF NOT EXISTS `scryfall_sets` (
   `code` varchar(8) NOT NULL,
   `parent_set_code` varchar(8) DEFAULT NULL,
   `name` varchar(128) DEFAULT NULL,

@@ -192,12 +192,14 @@ function buildFromMtgjson(setCodes, setIndex, allSetData, cb) {
 
 function rebuildTables() {
     fs.readFile("./data/rebuild.sql", "utf8", (err, query) => {
-        if (err) {
-            throw new Error(`Unable to create tables: ${err.message}.`);
-        } else {
-            buildMtgJsonDB();
-            buildScryfallDB();
-        }
+        conn.query(query, (err, data) => {
+            if (err) {
+                throw new Error(`Unable to create tables: ${err.message}.`);
+            } else {
+                buildMtgJsonDB();
+                buildScryfallDB();
+            }
+        });
     });
 }
 
