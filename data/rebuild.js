@@ -191,15 +191,22 @@ function buildFromMtgjson(setCodes, setIndex, allSetData, cb) {
 }
 
 function rebuildTables() {
-    fs.readFile("./data/rebuild.sql", "utf8", (err, query) => {
-        conn.query(query, (err, data) => {
-            if (err) {
-                throw new Error(`Unable to create tables: ${err.message}.`);
-            } else {
-                buildMtgJsonDB();
-                buildScryfallDB();
-            }
-        });
+    fs.readFile("./data/rebuild.sql", "utf8", (err, tableQuery) => {
+        fs.readFile("./data/collecion_value_function.sql", "utf8", (err, functionQuery) => {
+            conn.query(tableQuery, (err, data) => {
+                if (err) {
+                    throw new Error(`Unable to create tables: ${err.message}.`);
+                } else {
+                    conn.query(functionQuery, (err, data) => {
+                        if (err) {
+                            throw new Error(`Unable to create functions: ${err.message}.`);
+                        } else {
+                            buildMtgJsonDB();
+                            buildScryfallDB();
+                        }
+                    });
+                }
+            });
     });
 }
 
