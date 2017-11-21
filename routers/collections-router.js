@@ -18,6 +18,9 @@ router.get("/", (req, resp) => {
         if (err) {
             debug("Unable to fetch collections for user", req.session);
         }
+        data.forEach((co) => {
+            co.total_value = co.total_value || 0;
+        });
         send(req, resp, data);
     });
 });
