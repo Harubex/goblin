@@ -1,4 +1,4 @@
-delimiter $$
+drop function if exists `collection_value`;
 create function `collection_value`(collection_id int) returns double
 begin
     declare done int default false;
@@ -22,5 +22,4 @@ begin
 	end loop;
     close cur;
 return total_value;
-end$$
-delimiter ;
+end;

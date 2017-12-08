@@ -1,4 +1,22 @@
-CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
+
+DROP TABLE IF EXISTS `collection_card`;
+DROP TABLE IF EXISTS `collections`;
+DROP TABLE IF EXISTS `mtgjson_sets`;
+DROP TABLE IF EXISTS `mtgjson_cards`;
+DROP TABLE IF EXISTS `scryfall_sets`;
+DROP TABLE IF EXISTS `scryfall_cards`;
+DROP TABLE IF EXISTS `cards`;
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `collection_card` (
+  `collection_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `normal_qty` int(11) NOT NULL DEFAULT '0',
+  `foil_qty` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`collection_id`,`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `mtgjson_cards` (
   `id` varchar(64) NOT NULL,
   `mtgjson_code` varchar(8) NOT NULL,
   `layout` varchar(16) DEFAULT NULL,
@@ -42,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `mtgjson_cards` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `mtgjson_sets` (
+CREATE TABLE `mtgjson_sets` (
   `code` varchar(8) NOT NULL,
   `name` varchar(128) NOT NULL,
   `gathererCode` varchar(8) DEFAULT NULL,
@@ -58,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `mtgjson_sets` (
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `scryfall_cards` (
+CREATE TABLE `scryfall_cards` (
   `id` varchar(36) NOT NULL,
   `object` varchar(16) DEFAULT NULL,
   `multiverse_id` int(11) DEFAULT NULL,
@@ -112,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `scryfall_cards` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `scryfall_sets` (
+CREATE TABLE `scryfall_sets` (
   `code` varchar(8) NOT NULL,
   `parent_set_code` varchar(8) DEFAULT NULL,
   `name` varchar(128) DEFAULT NULL,
@@ -127,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `scryfall_sets` (
   CONSTRAINT `code` FOREIGN KEY (`parent_set_code`) REFERENCES `scryfall_sets` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `cards` (
+CREATE TABLE `cards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `scryfall_id` varchar(36) DEFAULT NULL,
   `mtgjson_id` varchar(64) DEFAULT NULL,
@@ -136,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   UNIQUE KEY `mtgjson_id_UNIQUE` (`mtgjson_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `password` varchar(128) NOT NULL,
@@ -145,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `collections` (
+CREATE TABLE `collections` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
@@ -153,12 +171,4 @@ CREATE TABLE IF NOT EXISTS `collections` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `collection_card` (
-  `collection_id` int(11) NOT NULL,
-  `card_id` int(11) NOT NULL,
-  `normal_qty` int(11) NOT NULL DEFAULT '0',
-  `foil_qty` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`collection_id`,`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

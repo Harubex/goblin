@@ -3,6 +3,7 @@ const DBConnection = require("../data/db-conn");
 const scryfall = require("scryfall");
 const JSONStream = require("JSONStream");
 const mysql = require("mysql");
+const knex = require("knex");
 const request = require("request");
 const conn = new DBConnection();
 
@@ -192,11 +193,12 @@ function buildFromMtgjson(setCodes, setIndex, allSetData, cb) {
 
 function rebuildTables() {
     fs.readFile("./data/rebuild.sql", "utf8", (err, tableQuery) => {
-        fs.readFile("./data/collecion_value_function.sql", "utf8", (err, functionQuery) => {
+        fs.readFile("./data/collection_value_function.sql", "utf8", (err, functionQuery) => {
             conn.query(tableQuery, (err, data) => {
                 if (err) {
                     throw new Error(`Unable to create tables: ${err.message}.`);
                 } else {
+                    console.log(functionQuery);
                     conn.query(functionQuery, (err, data) => {
                         if (err) {
                             throw new Error(`Unable to create functions: ${err.message}.`);
@@ -207,6 +209,7 @@ function rebuildTables() {
                     });
                 }
             });
+        });
     });
 }
 

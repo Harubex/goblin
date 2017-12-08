@@ -1,11 +1,11 @@
 // These names are stupid.
-import gulp from "gulp";
-import browserify from "browserify";
-import watchify from "watchify";
-import babelify from "babelify";
-import source from "vinyl-source-stream";
-import buffer from "vinyl-buffer";
-import babel from "gulp-babel";
+const gulp = require("gulp");
+const browserify = require("browserify");
+const watchify = require("watchify");
+const babelify = require("babelify");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const babel = require("gulp-babel");
 
 let destination = "build";
 
