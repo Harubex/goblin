@@ -59,6 +59,9 @@ const styles = (theme) => ({
     editOptions: { // move to overrides theme
         paddingBottom: 0,
         margin: 0
+    },
+    dialogContent: {
+        fontFamily: "Roboto"
     }
 });
 
@@ -177,7 +180,7 @@ class CollectionCard extends React.Component {
                 </Card>
                 <Dialog open={this.state.removeDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Remove cards from {this.props.name}</DialogTitle>
-                    <DialogContent>Are you sure you want to remove all cards from this collection?</DialogContent>
+                    <DialogContent className={classes.dialogContent}>Are you sure you want to remove all cards from this collection?</DialogContent>
                     <DialogActions>
                         <Button onClick={() => {this.closeDialog(this)}} color="primary">
                             Cancel
@@ -191,7 +194,7 @@ class CollectionCard extends React.Component {
                     onClose={() => this.closeDialog(this)} onAdd={(card) => this.addCard(this, card)}/>
                 <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Delete {this.props.name}</DialogTitle>
-                    <DialogContent>Are you sure you want to delete this collection?</DialogContent>
+                    <DialogContent className={classes.dialogContent}>Are you sure you want to delete this collection?</DialogContent>
                     <DialogActions>
                         <Button onClick={() => {this.closeDialog(this)}} color="primary">
                             Cancel
