@@ -53,7 +53,7 @@ router.get("/sets", (req, resp) => {
     if (!name) {
         resp.json([]);
     } else {
-        conn.query(`select sc.id, sc.\`set\` as code, sc.set_name from scryfall_cards sc 
+        conn.query(`select sc.id, sc.\`set\` as code, sc.rarity, sc.set_name from scryfall_cards sc 
             left join scryfall_sets ss on ss.code = sc.set where sc.name = ? order by ss.released_at desc;`, [name], (err, data) => {
                 if (err) {
                 debug(`Could not fetch info for ${name}.`);

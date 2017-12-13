@@ -17,6 +17,7 @@ class AddCardDialog extends React.Component {
             cardId: "",
             normalQty: "",
             foilQty: "",
+            sets: []
         };
     }
 

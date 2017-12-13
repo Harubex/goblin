@@ -5,14 +5,16 @@ import uuid from "uuid/v4";
 import { withStyles } from "material-ui/styles";
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
-import { MenuItem } from 'material-ui/Menu';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
-import Paper from 'material-ui/Paper';
+import { MenuItem } from "material-ui/Menu";
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
+import Paper from "material-ui/Paper";
+import { CircularProgress } from "material-ui/Progress";
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
 import ManaCost from "./ManaCost";
 import SetSymbol from "./SetSymbol";
 import fetch from "../utils/fetch";
+import SetSelector from "./SetSelector";
 
 class AutoCard extends React.Component {
     constructor(props) {
@@ -23,7 +25,8 @@ class AutoCard extends React.Component {
             cards: [],
             sets: [],
             suggestions: [],
-            id: this.props.id || uuid()
+            id: this.props.id || uuid(),
+            fetching: false
         };
         this.fetchCards("", (cardData) => {
             this.setState({
@@ -68,8 +71,8 @@ class AutoCard extends React.Component {
     }
 
     renderSuggestion(ctx, suggestion, query, isHighlighted) {
-        const classes = ctx.props.classes;
         let frontFace = suggestion.card_faces ? suggestion.card_faces[0] : suggestion;
+        const classes = ctx.props.classes;
         const matches = match(frontFace.name, query);
         const parts = parse(frontFace.name, matches);
       
@@ -112,14 +115,21 @@ class AutoCard extends React.Component {
 
     getSuggestionValue(ctx, suggestion) {
         let name = suggestion.name;
+        ctx.setState({
+            fetching: true
+        });
         fetch(`/card/sets?name=${name}`, "get", (err, json) => {
             let defaultId = json[0].id;
+            let sets = json || [];
             ctx.setState({
                 cardId: defaultId,
-                sets: json.length < 1 ? json : []
+                sets: sets,
+                fetching: false
             });
-            if (json.length == 1) {
-                ctx.setChosen(ctx, json[0].id, json[0].set_name)
+            if (sets.length == 1) {
+                ctx.setChosen(ctx, sets[0].id, sets[0].set_name);
+            } else if (sets.length > 1) {
+                
             }
             ctx.props.onAdd(defaultId);
         });
@@ -207,21 +217,15 @@ class AutoCard extends React.Component {
                 <Dialog open={this.state.sets.length > 0} onRequestClose={() => this.clearSets(this)}>
                     <DialogTitle className={classes.dialogContent}>Select Card Set</DialogTitle>
                     <DialogContent className={classes.dialogContent}>
-                        {this.state.sets.map((ele) => (
-                            <div key={ele.id} className={classes.setOption} onClick={() => this.setChosen(this, ele.id, ele.set_name)}>
-                                <SetSymbol setCode={ele.code} /> {ele.set_name}
-                            </div>
-                        ))}
+                        <SetSelector sets={this.state.sets} onSetChosen={(id, name) => this.setChosen(this, id, name)}/>
                     </DialogContent>
                     <DialogActions>
                         <Button color="accent" onClick={() => this.clearSets(this)}>
                             {"Cancel"}
                         </Button>
-                        <Button color="primary">
-                            {"Done"}
-                        </Button>
                     </DialogActions>
                 </Dialog>
+                {this.state.fetching && <CircularProgress className={classes.progress} size={50} />}
             </div>
         );
     }
@@ -279,5 +283,9 @@ export default withStyles((theme) => ({
         display: "inline-block",
         paddingRight: "5px",
         lineHeight: "24px"
+    },
+    progress: {
+        position: "relative",
+        bottom: "1em"
     }
 }))(AutoCard);
