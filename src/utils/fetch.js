@@ -15,7 +15,7 @@ export default function(path, method, body, cb = () => {}) {
     };
     if (typeof (body) === "function") {
         cb = body;
-    } else if (body) {  
+    } else if (body) {
         options.body = JSON.stringify(body);
     }
     fetch(new Request(path, options)).then((resp) => resp.json()).then((json) => {
