@@ -58,8 +58,8 @@ app.use(require("./middleware/error"));
 let server = app;
 if (process.env.NODE_ENV !== "production") {
     server = https.createServer({
-        key: fs.readFileSync(path.join(__dirname, "test-key.pem")),
-        cert: fs.readFileSync(path.join(__dirname, "test-cert.pem"))
+        key: fs.readFileSync(path.join(__dirname, "./credentials/test-key.pem")),
+        cert: fs.readFileSync(path.join(__dirname, "./credentials/test-cert.pem"))
     }, app);
 }
 server.listen(port);

@@ -45,13 +45,13 @@ class Collections extends React.Component {
                         size={collection.size} total_value={collection.total_value} />
                 ))}
                 <DialogButton dialogTitle={"Create a new collection"} dialogContent={(
-                    <div>
-                        <p>Provide a name for the new collection.</p>
+                    <React.Fragment>
+                        <DialogContentText>Provide a name for the new collection.</DialogContentText>
                         <TextField id="collectionName" className={classes.nameInput} 
                             placeholder="Collection Name"
                             value={this.state.newCollectionName}
                             onChange={(ev) => this.inputChange(this, ev, "collectionName")} />
-                    </div>
+                    </React.Fragment>
                 )} doneText="Add" dialogDone={() => this.createCollection(this)}/>
             </div>
         );
