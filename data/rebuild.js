@@ -3,7 +3,6 @@ const DBConnection = require("../data/db-conn");
 const scryfall = require("scryfall");
 const JSONStream = require("JSONStream");
 const mysql = require("mysql");
-const knex = require("knex");
 const request = require("request");
 const conn = new DBConnection();
 

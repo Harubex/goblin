@@ -1,13 +1,40 @@
+const fs = require("fs");
+const path = require("path");
 const debug = require("debug")("server/api");
 const express = require("express");
 const scryfall = require("scryfall");
 const send = require("./static-router");
 const DBConnection = require("../data/db-conn");
+const images = require("../data/images");
 
 const router = express.Router();
 const conn = new DBConnection();
 
 let cache = [];
+
+router.get("/images/:set/:code", (req, resp) => {
+    const staticPath = path.join(__dirname, `../static/cards/${req.params.set}/${req.params.code}`);
+    let exists = fs.existsSync(staticPath + ".png");
+    if (!exists) {
+        exists = fs.existsSync(staticPath + ".jpg");
+        if (!exists) {
+            scryfall.getCard(req.params.set, req.params.code, (err, card) => {
+                if (err) {
+                    debug(err);
+                    resp.sendFile(path.join(__dirname, "../static/cardback.png"));
+                } else {
+                    images.saveImage(card, card.image_uris.png, card.set, card.collector_number, () => {
+                        resp.sendFile(staticPath + ".png");
+                    });
+                }
+            });
+        } else {
+            resp.sendFile(staticPath + ".jpg");
+        }
+    } else {
+        resp.sendFile(staticPath + ".png");
+    }
+});
 
 router.get("/:set/:code", (req, resp) => {
     // Check if card data is cached.

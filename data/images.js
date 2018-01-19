@@ -6,13 +6,13 @@ const jimp = require("jimp");
 
 const cardImgDir = "./static/cards";
 
-fs.rmdir(cardImgDir, (err) => {
+/*fs.rmdir(cardImgDir, (err) => {
     fs.mkdir(cardImgDir, (err) => {
         getScryfallCardPage(1, (cards) => {
             console.log(cards.length + " cards processed.");
         });
     });
-});
+});*/
 
 function saveImages(cards, cb, idx = 0) {
     if (cards[idx]) {
@@ -68,3 +68,5 @@ function getScryfallCardPage(page, cb, _data = []) {
         }
     });
 }
+
+exports.saveImage = saveImage;

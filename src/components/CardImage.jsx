@@ -5,15 +5,6 @@ import { withStyles } from "material-ui/styles";
 class CardImage extends React.Component { 
     constructor(props) {
         super(props);
-        this.state = {
-            url: "/cardback.png"
-        };
-    }
-
-    imageLoaded(ctx) {
-        ctx.setState({
-            url: ctx.props.url
-        });
     }
               
     render() {
@@ -21,8 +12,7 @@ class CardImage extends React.Component {
         const classes = this.props.classes;
         return (
             <div className="card-image-container">
-                <img className={`${this.props.className} card-image`} 
-                onLoad={(ev) => this.imageLoaded(this, this.props.url)} src={this.state.url} 
+                <img className={`${this.props.className} card-image`} src={`/card/images/${this.props.set}/${this.props.code}`}
                 style={{width: this.props.width}} />
             </div>
         );

@@ -216,7 +216,7 @@ class AutoCard extends React.Component {
                 />
                 <Dialog open={this.state.sets.length > 0} onRequestClose={() => this.clearSets(this)}>
                     <DialogTitle className={classes.dialogContent}>Select Card Set</DialogTitle>
-                    <DialogContent className={classes.dialogContent}>
+                    <DialogContent className={classes.dialogContent}>multipleStatements
                         <SetSelector sets={this.state.sets} onSetChosen={(id, name) => this.setChosen(this, id, name)}/>
                     </DialogContent>
                     <DialogActions>

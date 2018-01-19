@@ -1,8 +1,7 @@
-
 DROP TABLE IF EXISTS `collection_card`;
-DROP TABLE IF EXISTS `collections`;
 DROP TABLE IF EXISTS `mtgjson_sets`;
 DROP TABLE IF EXISTS `mtgjson_cards`;
+DROP TABLE IF EXISTS `collections`;
 DROP TABLE IF EXISTS `scryfall_sets`;
 DROP TABLE IF EXISTS `scryfall_cards`;
 DROP TABLE IF EXISTS `cards`;

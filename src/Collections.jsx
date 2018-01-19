@@ -39,14 +39,14 @@ class Collections extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <div className={`${classes.collection_container} container`}>
+            <div className={`${classes.collectionContainer} container`}>
                 {this.state.collectionData.map((collection) => (
                     <CollectionCard key={uuid()} id={collection.id} name={collection.name} 
                         size={collection.size} total_value={collection.total_value} />
                 ))}
                 <DialogButton dialogTitle={"Create a new collection"} dialogContent={(
                     <div>
-                        <p>Provide a name for the new collection.</p>
+                        <DialogContentText className={classes.dialogText}>Provide a name for the new collection.</DialogContentText>
                         <TextField id="collectionName" className={classes.nameInput} 
                             placeholder="Collection Name"
                             value={this.state.newCollectionName}
@@ -59,10 +59,14 @@ class Collections extends React.Component {
 }
 
 export default withStyles({
-    collection_container: {
+    collectionContainer: {
         textAlign: "center"
     },
     nameInput: {
-        width: "100%"
+        width: "100%",
+        marginTop: "1em"
+    },
+    dialogText: {
+        padding: "0.5em 0"
     }
 })(Collections);

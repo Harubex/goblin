@@ -63,7 +63,7 @@ class HeaderBar extends React.Component {
                                     <Menu open={this.state.menuOpen} anchorEl={this.state.menuEle} transformOrigin={{
                                         vertical: "top",
                                         horizontal: "left"
-                                    }} onRequestClose={() => this.closeMenu(this)}>
+                                    }} onClose={() => this.closeMenu(this)}>
                                         <MenuItem onClick={this.handleRequestClose}>
                                             <a className={classes.menuLink} href="/account">
                                                 Account

@@ -16,7 +16,7 @@ class CardGlance extends React.Component {
                         <Typography type="body1" className={classes.title}>
                             {this.props.name}
                         </Typography>
-                        <CardImage className={classes.cardImage} url={this.props.image_uri} width="100px" />
+                        <CardImage className={classes.cardImage} set={this.props.code} code={this.props.num} width="100px" />
                         <Typography type="body2" className={classes.pos}>
                             Normal: {this.props.normal_qty}   Foil: {this.props.foil_qty}
                         </Typography>
