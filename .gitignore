@@ -60,3 +60,4 @@ typings/
 build/
 credentials/
 static/cards/
+package-lock.json

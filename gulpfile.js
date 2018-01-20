@@ -1,5 +1,6 @@
 // These names are stupid.
 const gulp = require("gulp");
+const eslint = require("gulp-eslint");
 const browserify = require("browserify");
 const watchify = require("watchify");
 const babelify = require("babelify");
@@ -9,9 +10,8 @@ const babel = require("gulp-babel");
 
 let destination = "build";
 
-gulp.task("build-client", ["build-server"], () => {
+gulp.task("build-client", ["lint", "build-server"], () => {
     gulp.src("src/*.css").pipe(gulp.dest(destination));
-
     let bundler = browserify(Object.assign(watchify.args, {
         entries: "src/main.jsx",
         extensions: [".jsx", ".js"], 
@@ -28,6 +28,18 @@ gulp.task("build-client", ["build-server"], () => {
 
 gulp.task("build-server", () => {
     compileFiles();
+});
+
+gulp.task("lint", () => {
+    return gulp.src(["**/*.js", "**/*.jsx", "!node_modules/**"])
+        .pipe(eslint())
+        .pipe(eslint.results((results) => {
+            console.log(`Total Results: ${results.length}`);
+            console.log(`Total Warnings: ${results.warningCount}`);
+            console.log(`Total Errors: ${results.errorCount}`);
+        }))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 
 function compileFiles() {
