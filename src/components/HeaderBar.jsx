@@ -40,24 +40,24 @@ class HeaderBar extends React.Component {
             <div className={classes.root}>
                 <AppBar position="fixed">
                     <Toolbar disableGutters>
-                        <IconButton className={classes.menuButton} color="contrast">
+                        <IconButton className={classes.menuButton} className={classes.whiteButton}>
                             <HomeIcon />
                         </IconButton>
                         <div className={classes.leftItems}>
                             <a className={classes.menuLink} href="/cards">
-                                <Button color="contrast">Card Search</Button>
+                                <Button className={classes.whiteButton}>Card Search</Button>
                             </a>
                             <a className={classes.menuLink} href="/collections">
-                                <Button color="contrast">Collection Manager</Button>
+                                <Button className={classes.whiteButton}>Collection Manager</Button>
                             </a>
                             <a className={classes.menuLink} href="/decks">
-                                <Button color="contrast">Deck Editor</Button>
+                                <Button className={classes.whiteButton}>Deck Editor</Button>
                             </a>
                         </div>
                         <div className={classes.rightItems}>
                             {session.username ? (
                                 <div>
-                                    <Button color="contrast" onMouseOver={(ev) => this.openMenu(this, ev)}>
+                                    <Button className={classes.whiteButton} onMouseOver={(ev) => this.openMenu(this, ev)}>
                                         {session.username}
                                     </Button>
                                     <Menu open={this.state.menuOpen} anchorEl={this.state.menuEle} transformOrigin={{
@@ -89,10 +89,10 @@ class HeaderBar extends React.Component {
                             ) : (
                                 <div>
                                     <a className={classes.menuLink} href="/user/login">
-                                        <Button color="contrast">Login</Button>
+                                        <Button className={classes.whiteButton}>Login</Button>
                                     </a>
                                     <a className={classes.menuLink} href="/user/register">
-                                        <Button color="contrast">Register</Button>
+                                        <Button className={classes.whiteButton}>Register</Button>
                                     </a>
                                 </div>
                             )}
@@ -116,6 +116,9 @@ export default withStyles((theme) => ({
     menuLink: {
         textDecoration: "none",
         color: "black",
+    },
+    whiteButton: {
+        color: "white"
     },
     leftItems: {
         flex: 1

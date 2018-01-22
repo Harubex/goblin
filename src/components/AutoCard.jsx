@@ -221,7 +221,7 @@ class AutoCard extends React.Component {
                         <SetSelector sets={this.state.sets} onSetChosen={(id, name) => this.setChosen(this, id, name)}/>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="accent" onClick={() => this.clearSets(this)}>
+                        <Button color="secondary" onClick={() => this.clearSets(this)}>
                             {"Cancel"}
                         </Button>
                     </DialogActions>

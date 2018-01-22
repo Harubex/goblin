@@ -1,19 +1,9 @@
-DROP TABLE IF EXISTS `collection_card`;
 DROP TABLE IF EXISTS `mtgjson_sets`;
 DROP TABLE IF EXISTS `mtgjson_cards`;
-DROP TABLE IF EXISTS `collections`;
 DROP TABLE IF EXISTS `scryfall_sets`;
 DROP TABLE IF EXISTS `scryfall_cards`;
 DROP TABLE IF EXISTS `cards`;
 DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `collection_card` (
-  `collection_id` int(11) NOT NULL,
-  `card_id` int(11) NOT NULL,
-  `normal_qty` int(11) NOT NULL DEFAULT '0',
-  `foil_qty` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`collection_id`,`card_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `mtgjson_cards` (
   `id` varchar(64) NOT NULL,
@@ -160,14 +150,4 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `collections` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `name` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  KEY `user_id_idx` (`user_id`),
-  CONSTRAINT `id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -5,7 +5,7 @@ import "whatwg-fetch";
  * @param {Object} body
  * @param {(err: any, json: Object) => void} cb
  */
-export default function(path, method, body, cb = () => {}) {
+export default async function(path, method, body, cb = () => {}) {
     let options = {
         method: method.toUpperCase(),
         credentials: "include",
@@ -18,9 +18,15 @@ export default function(path, method, body, cb = () => {}) {
     } else if (body) {
         options.body = JSON.stringify(body);
     }
-    fetch(new Request(path, options)).then((resp) => resp.json()).then((json) => {
-        cb(null, json);
-    }).catch((err) => {
+    try {
+        let resp = await fetch(new Request(path, options));
+        let json = await resp.json();
+        if (resp.ok) {
+            cb(null, json);
+        } else {
+            cb(json);
+        }
+    } catch (err) {
         cb(err);
-    });
+    }
 };

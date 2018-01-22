@@ -76,7 +76,7 @@ class AddCardDialog extends React.Component {
                         onChange={(ev) => this.onInputChange(this, "foilQty", ev.target.value)} margin="normal" />
                 </DialogContent>
                 <DialogActions>
-                    <Button color="accent" onClick={() => this.addCards(this)}>
+                    <Button color="secondary" onClick={() => this.addCards(this)}>
                         {"Add"}
                     </Button>
                     <Button onClick={() => this.doneAdding(this)} color="primary">

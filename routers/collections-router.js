@@ -119,18 +119,30 @@ router.post("/add", (req, resp) => {
     let body = req.body || {};
     if (body.collectionName) {
         conn.query(`
-            insert into collections (user_id, name) values (?, ?);
             select * from collections where user_id = ? and name = ?;
-        `, [1, body.collectionName, 1, body.collectionName], (err, data) => {
+        `, [req.session.userid, body.collectionName], (err, data) => {
             if (err) {
                 debug(err);
+            } else if (data.length > 0) {
+                resp.status(409).json({ message: "A collection with this name already exists."});
             } else {
-                resp.json({
-                    message: `Collection (${req.params.collectionId}) deleted successfully.`,
-                    data: data[1][0]
+                conn.query(`
+                    insert into collections (user_id, name) values (?, ?);
+                    select * from collections where user_id = ? and name = ?;
+                `, [req.session.userid, body.collectionName, req.session.userid, body.collectionName], (err, data) => {
+                    if (err) {
+                        debug(err);
+                    } else {
+                        resp.json({
+                            message: `Collection (${body.collectionName}) added successfully.`,
+                            data: data[1][0]
+                        });
+                    }
                 });
             }
         });
+    } else {
+        resp.status(400).json({ message: "Please provide a name."});
     }
 });
 

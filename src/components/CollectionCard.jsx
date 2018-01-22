@@ -157,7 +157,7 @@ class CollectionCard extends React.Component {
                     </a>
                     <CardActions className={classes.actions}>
                         <Tooltip className={classes.tooltip} placement="bottom" title="Add cards">
-                            <IconButton color="accent" className={classes.button} onClick={() => {this.addToCollection(this)}}>
+                            <IconButton color="secondary" className={classes.button} onClick={() => {this.addToCollection(this)}}>
                                 <AddIcon />
                             </IconButton>
                         </Tooltip>
@@ -167,7 +167,7 @@ class CollectionCard extends React.Component {
                             </IconButton>
                         </Tooltip>
                         <Tooltip className={classes.tooltip} placement="bottom" title="Delete collection">
-                            <IconButton color="accent" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
+                            <IconButton color="secondary" className={classes.button} onClick={() => {this.deleteCollection(this)}}>
                                 <DeleteIcon />
                             </IconButton>
                         </Tooltip>
@@ -185,7 +185,7 @@ class CollectionCard extends React.Component {
                         <Button onClick={() => {this.closeDialog(this)}} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={() => {this.confirmRemove(this)}} color="accent">
+                        <Button onClick={() => {this.confirmRemove(this)}} color="secondary">
                             Remove
                         </Button>
                     </DialogActions>
@@ -199,7 +199,7 @@ class CollectionCard extends React.Component {
                         <Button onClick={() => {this.closeDialog(this)}} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={() => {this.confirmDelete(this)}} color="accent">
+                        <Button onClick={() => {this.confirmDelete(this)}} color="secondary">
                             Delete
                         </Button>
                     </DialogActions>
@@ -216,7 +216,8 @@ CollectionCard.propTypes = {
 }
 
 CollectionCard.defaultProps = {
-    size: 0
+    size: 0,
+    total_value: 0
 }
 
 export default withStyles(styles)(CollectionCard);
