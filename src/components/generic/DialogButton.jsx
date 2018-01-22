@@ -48,8 +48,8 @@ class DialogButton extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <div>
-                <Dialog open={this.state.dialogOpen} onRequestClose={() => {this.onCancel(this)}}>
+            <React.Fragment>
+                <Dialog open={this.state.dialogOpen} onClose={() => {this.onCancel(this)}}>
                     <DialogTitle>{this.props.dialogTitle}</DialogTitle>
                     <DialogContent>{this.props.dialogContent}</DialogContent>
                     <DialogActions>
@@ -64,7 +64,7 @@ class DialogButton extends React.Component {
                 <Button fab color="primary" className={classes.button} onClick={() => {this.onButtonClick(this)}} style={this.props}>
                     {this.props.icon}
                 </Button>
-            </div>
+            </React.Fragment>
         );
     }
 }

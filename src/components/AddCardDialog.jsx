@@ -15,6 +15,7 @@ class AddCardDialog extends React.Component {
             open: this.props.addDialogOpen,
             autoCardId: uuid(),
             cardId: "",
+            cardName: "",
             normalQty: "",
             foilQty: "",
             sets: []
@@ -25,11 +26,13 @@ class AddCardDialog extends React.Component {
         ctx.props.onClose();
     }
 
-    onAdd(ctx, cardId) {
+    onAdd(ctx, cardId, cardName) {
         ctx.setState({
-            cardId: cardId
+            cardId: cardId,
+            cardName: cardName
         });
     }
+    
     onInputChange(ctx, valueName, newValue) {
         ctx.setState({
             [valueName]: newValue
@@ -40,7 +43,8 @@ class AddCardDialog extends React.Component {
         let cardData = {
             cardId: ctx.state.cardId,
             normalQty: ctx.state.normalQty || 0,
-            foilQty: ctx.state.foilQty || 0
+            foilQty: ctx.state.foilQty || 0,
+            cardName: ctx.state.cardName
         };
         fetch(`/collections/${this.props.collectionId}/add`, "post", cardData, (err, json) => {
             ctx.props.onAdd(cardData);
@@ -60,12 +64,12 @@ class AddCardDialog extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <Dialog open={this.props.open} onRequestClose={() => {this.doneAdding(this)}} ignoreBackdropClick 
+            <Dialog open={this.props.open} onClose={() => {this.doneAdding(this)}} disableBackdropClick 
                     onKeyDown={(ev) => this.keyPressed(this, ev)}>
                 <DialogTitle className={classes.dialogContent}>Add New Cards</DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    <AutoCard id={this.state.autoCardId} collectionId={this.props.collectionId} 
-                        onAdd={(cardId) => this.onAdd(this, cardId)} />
+                    <AutoCard id={this.state.autoCardId} collectionId={this.props.collectionId}disableBackdropClickdisableBackdropClick 
+                        onAdd={(cardId, cardName) => this.onAdd(this, cardId, cardName)} />
                     <TextField id="normalQty" label="Normal Quantity" value={this.state.normalQty} className={classes.qtyInput}
                         onChange={(ev) => this.onInputChange(this, "normalQty", ev.target.value)} margin="normal" />
                     <TextField id="foilQty" label="Foil Quantity" value={this.state.foilQty} className={classes.qtyInput}

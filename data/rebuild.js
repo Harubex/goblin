@@ -30,7 +30,7 @@ function buildMtgJsonDB() {
     });
 }
 
-function buildScryfallDB() {
+function buildScryfallDB(cb = () => {}) {
     conn.query("truncate scryfall_sets;", () => {
         fs.readFile("./data/scryfall_sets_insert.sql", "utf8", (err, setQuery) => {
             if (err) {
@@ -63,19 +63,20 @@ function buildScryfallDB() {
                         throw err;
                     }
                     console.log("sets added");
-                });
-            });
-        });
-    });
-    conn.query("truncate scryfall_cards;", () => {
-        fs.readFile("./data/scryfall_cards_insert.sql", "utf8", (err, data) => {
-            if (err) {
-                throw err;
-            }
-            query = data;
-            getScryfallCardPage(1, (cards) => {
-                conn.query("truncate cards; insert into cards (scryfall_id) select id from scryfall_cards;", {}, () => {
-                    console.log(cards.length + " cards processed.");
+                    conn.query("truncate scryfall_cards;", () => {
+                        fs.readFile("./data/scryfall_cards_insert.sql", "utf8", (err, data) => {
+                            if (err) {
+                                throw err;
+                            }
+                            query = data;
+                            getScryfallCardPage(1, (cards) => {
+                                conn.query("truncate cards; insert into cards (scryfall_id) select id from scryfall_cards;", {}, () => {
+                                    console.log(cards.length + " cards processed.");
+                                    cb();
+                                });
+                            });
+                        });
+                    });
                 });
             });
         });
@@ -202,8 +203,7 @@ function rebuildTables() {
                         if (err) {
                             throw new Error(`Unable to create functions: ${err.message}.`);
                         } else {
-                            buildMtgJsonDB();
-                            buildScryfallDB();
+                            buildScryfallDB(buildMtgJsonDB);
                         }
                     });
                 }

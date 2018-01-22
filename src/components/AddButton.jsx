@@ -28,8 +28,8 @@ class AddButton extends React.Component {
     render() {
         const classes = this.props.classes;
         return (
-            <>
-                <Dialog open={this.state.adding} onRequestClose={() => {this.doneAdding(this)}}>
+            <React.Fragment>
+                <Dialog open={this.state.adding} onClose={() => {this.doneAdding(this)}}>
                     <DialogTitle>{this.props.dialogTitle}</DialogTitle>
                     <DialogContent>{this.props.dialogContent}</DialogContent>
                     <DialogActions>
@@ -44,7 +44,7 @@ class AddButton extends React.Component {
                 <Button fab color="primary" className={classes.button} onClick={() => {this.onAdding(this)}}>
                     <AddIcon />
                 </Button>
-            </>
+            </React.Fragment>
         );
     }
 }

@@ -131,7 +131,6 @@ class AutoCard extends React.Component {
             } else if (sets.length > 1) {
                 
             }
-            ctx.props.onAdd(defaultId);
         });
         return name;
     }
@@ -161,11 +160,13 @@ class AutoCard extends React.Component {
     };
 
     setChosen(ctx, cardId, setName) {
-        ctx.state.cardId = cardId;
+        const cardName = ctx.state.value + ` (${setName})`;
         ctx.setState({
-            value: ctx.state.value + ` (${setName})`
+            cardId: cardId,
+            value: cardName
         });
         ctx.clearSets(ctx);
+        ctx.props.onAdd(cardId, cardName);
     }
     
     clearValues(ctx) {
@@ -214,9 +215,9 @@ class AutoCard extends React.Component {
                     renderSuggestion={(suggestion, {query, isHighlighted}) => this.renderSuggestion(this, suggestion, query, isHighlighted)}
                     inputProps={props}
                 />
-                <Dialog open={this.state.sets.length > 0} onRequestClose={() => this.clearSets(this)}>
+                <Dialog open={this.state.sets.length > 0} onClose={() => this.clearSets(this)}>
                     <DialogTitle className={classes.dialogContent}>Select Card Set</DialogTitle>
-                    <DialogContent className={classes.dialogContent}>multipleStatements
+                    <DialogContent className={classes.dialogContent}>
                         <SetSelector sets={this.state.sets} onSetChosen={(id, name) => this.setChosen(this, id, name)}/>
                     </DialogContent>
                     <DialogActions>

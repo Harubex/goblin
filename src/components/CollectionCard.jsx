@@ -178,7 +178,7 @@ class CollectionCard extends React.Component {
                         </Tooltip>
                     </CardActions>
                 </Card>
-                <Dialog open={this.state.removeDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
+                <Dialog open={this.state.removeDialogOpen} onClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Remove cards from {this.props.name}</DialogTitle>
                     <DialogContent className={classes.dialogContent}>Are you sure you want to remove all cards from this collection?</DialogContent>
                     <DialogActions>
@@ -192,7 +192,7 @@ class CollectionCard extends React.Component {
                 </Dialog>
                 <AddCardDialog collectionId={this.props.id} open={this.state.addDialogOpen} 
                     onClose={() => this.closeDialog(this)} onAdd={(card) => this.addCard(this, card)}/>
-                <Dialog open={this.state.deleteDialogOpen} onRequestClose={() => {this.closeDialog(this)}}>
+                <Dialog open={this.state.deleteDialogOpen} onClose={() => {this.closeDialog(this)}}>
                     <DialogTitle>Delete {this.props.name}</DialogTitle>
                     <DialogContent className={classes.dialogContent}>Are you sure you want to delete this collection?</DialogContent>
                     <DialogActions>

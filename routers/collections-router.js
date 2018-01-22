@@ -145,6 +145,7 @@ router.post("/:collectionId/add", (req, resp) => {
             debug(err);
         } else {
             resp.json({
+                msg: ""
             });
         }
     });

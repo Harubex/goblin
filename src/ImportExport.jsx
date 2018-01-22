@@ -42,7 +42,7 @@ class ImportExport extends React.Component {
         const classes = this.props.classes;
         return (
             <div>
-                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onRequestClose={() => this.clearMessage(this)}>
+                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onClose={() => this.clearMessage(this)}>
                     <DialogTitle>File Upload</DialogTitle>
                     <DialogContent>
                         <DialogContentText>

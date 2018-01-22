@@ -58,6 +58,7 @@ typings/
 .env
 
 build/
-credentials/
+credentials/dynamo-creds.json
+credentials/db-creds.json
 static/cards/
 package-lock.json

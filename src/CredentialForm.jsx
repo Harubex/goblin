@@ -33,7 +33,7 @@ class CredentialForm extends React.Component {
         const classes = this.props.classes;
         return (
             <div>
-                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onRequestClose={() => this.clearError(this)}>
+                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onClose={() => this.clearError(this)}>
                     <DialogTitle>{`Unable to ${this.props.formType}`}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
