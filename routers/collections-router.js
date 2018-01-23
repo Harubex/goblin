@@ -84,26 +84,37 @@ router.delete("/:collectionId/cards", (req, resp) => {
 });
 
 router.get("/:collectionId", (req, resp) => {
-    conn.query(`select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
-        left join collection_card cc on cc.collection_id = co.id 
-        left join cards ca on ca.id = cc.card_id 
-        left join scryfall_cards sc on sc.id = ca.scryfall_id 
-        where co.id = ? group by sc.set, sc.collector_number`, [req.params.collectionId], (err, res) => {
-        let sets = {};
+    conn.query(`
+        select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
+            left join collection_card cc on cc.collection_id = co.id 
+            left join cards ca on ca.id = cc.card_id 
+            left join scryfall_cards sc on sc.id = ca.scryfall_id 
+            where co.id = ? group by sc.set, sc.collector_number
+    `, [req.params.collectionId], (err, res) => {
+        let ownedCards = {};
         for (let i = 0; i < res.length; i++) {
-            addCardToSet(sets, res[i]);
+            addCardToSet(ownedCards, res[i]);
         }
         conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
-            send(req, resp, {collectionId: req.params.collectionId, sets: setData, ownedCards: sets});
+            send(req, resp, {
+                collectionId: req.params.collectionId,
+                ownedCards: ownedCards, 
+                sets: setData.map((set) => {
+                    set.visible = true;
+                    return set;
+                })
+            });
         });
     });
 });
 
 router.get("/:collectionId/:setCode", (req, resp) => {
-    conn.query(`select sc.collector_number, sc.card_faces, sc.usd, ifnull(cc.normal_qty, 0) as normal_qty, 
+    conn.query(`
+        select sc.collector_number, sc.card_faces, sc.usd, ifnull(cc.normal_qty, 0) as normal_qty, 
             ifnull(cc.foil_qty, 0) as foil_qty, sc.name, sc.image_uris, sc.set 
             from magical.scryfall_cards sc left join cards c on c.scryfall_id = sc.id left join collection_card cc on cc.card_id = c.id
-            where sc.\`set\` = ? order by cast(sc.collector_number as unsigned);`, [req.params.setCode], (err, data) => {
+            where sc.\`set\` = ? order by ifnull(nullif(cast(sc.collector_number as signed), 0), 1e50);
+    `, [req.params.setCode], (err, data) => {
         if (err) {
             debug(err);
         } else {
