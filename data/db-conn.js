@@ -1,5 +1,6 @@
 const fs = require("fs");
 const mysql = require("mysql");
+const squel = require("squel");
 const isJSON = require("is-json");
 
 class DBConnection {
@@ -15,14 +16,20 @@ class DBConnection {
 
     /**
      * Performs a query.
-     * @param {string} query
+     * @param {string | squel.BaseBuilder} query
      * @param {any?} args
      * @param {(err: IError, results?: any, fields?: IFieldInfo) => void} cb 
      */
     query(query, args, cb) {
-        if (typeof(cb) === "undefined") {
+        if (typeof (cb) === "undefined" && typeof (args) === "function") {
             cb = args;
-            args = {};
+            if (typeof (query) === "object" && query.toParam) {
+                const sql = query.toParam();
+                query = sql.text;
+                args = sql.values;
+            } else {
+                args = [];
+            }
         }
         checkCreds(this, () => {
             let conn = mysql.createConnection(this.connInfo);

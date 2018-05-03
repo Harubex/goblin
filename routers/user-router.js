@@ -3,6 +3,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const DBConnection = require("../data/db-conn");
 const send = require("./static-router");
+const squel = require("squel");
 
 const router = express.Router();
 const conn = new DBConnection();
@@ -28,7 +29,7 @@ router.post("/login", (req, resp) => {
     } else if (body.username.length > 64) {
         sendError(req, resp, "The given username is too long.");
     } else {
-        conn.query(`select * from users where name = ?;`, [body.username], (err, data) => {
+        conn.query(squel.select().from("users").where("name = ?", body.username), (err, data) => {
             if (err) {
                 sendError(req, resp, err.message);
             } else if (data.length == 0) {
@@ -62,7 +63,7 @@ router.post("/register", (req, resp) => {
     } else if (body.username.length > 64) {
         sendError(req, resp, "The given username is too long.");
     } else {
-        conn.query("select count(*) as userCount from users where name = ?", [body.username], (err, res) => {
+        conn.query(squel.select().from("users").field("count(*)", "userCount").where("name = ?", body.username), (err, res) => {
             if (err) {
                 sendError(req, resp, err.message);
             } else if (res[0].userCount > 0) {
@@ -72,6 +73,11 @@ router.post("/register", (req, resp) => {
                     if (err) {
                         sendError(req, resp, err.message);
                     } else {
+                        var a = squel.insert().into("users").setFields({
+                            name: body.username,
+                            password: hash
+                        });
+                        var b = squel.select().from("users").where("name = ?", body.username).toParam();
                         conn.query("insert into users (name, password) values (?, ?); select * from users where name = ?;", 
                         [body.username, hash, body.username], (err, data) => {
                             if (err) {

@@ -39,7 +39,7 @@ app.use(session({
     name: "goblin-cookie",
     store: new DynamoStore({
         table: "UserSessions",
-        AWSConfigJSON: JSON.parse(fs.readFileSync(path.join(__dirname, "credentials/dynamo-creds.json"), "utf8"))
+        AWSConfigPath: "./credentials/dynamo-creds.json"
     }),
     genid: uuid,
     secure: cookieSecure,
