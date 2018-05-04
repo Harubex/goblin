@@ -7,7 +7,6 @@ class DBConnection {
 
     constructor(connInfo) {
         this.connInfo = connInfo;
-        checkCreds(this);
     }
 
     escape(value) {
@@ -16,27 +15,37 @@ class DBConnection {
 
     /**
      * Performs a query.
-     * @param {string | squel.BaseBuilder} query
+     * @param {string | squel.BaseBuilder | squel.BaseBuilder[]} query
      * @param {any?} args
-     * @param {(err: IError, results?: any, fields?: IFieldInfo) => void} cb 
+     * @return {Promise<Object>}
      */
-    query(query, args, cb) {
-        if (typeof (cb) === "undefined" && typeof (args) === "function") {
-            cb = args;
-            if (typeof (query) === "object" && query.toParam) {
-                const sql = query.toParam();
-                query = sql.text;
-                args = sql.values;
-            } else {
-                args = [];
+    async query(query, args = []) {
+        // typeof here matches both objects and arrays.
+        if (typeof (query) === "object") {
+            if (!Array.isArray(query)) {
+                query = [query];
             }
+            let queries = [];
+            let params = [];
+            query.forEach((ele) => {
+                const statement = ele.toParam();
+                queries.push(statement.text);
+                params.push(...statement.values);
+            });
+            query = queries.join("; ");
+            args = params;
         }
-        checkCreds(this, () => {
+        await checkCreds(this);
+        return new Promise((resolve, reject) => {
             let conn = mysql.createConnection(this.connInfo);
             conn.connect();
             conn.query(mysql.format(query, args), (err, res) => {
                 conn.end();
-                cb(err, parseObject(res));
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(parseObject(res));
+                }
             });
         });
     }
@@ -61,18 +70,25 @@ function parseObject(data) {
     return data;
 }
 
+/**
+ * 
+ * @param {*} instance 
+ * @returns {Promise<void>}
+ */
 function checkCreds(instance, cb = () => {}) {
-    if (!instance.connInfo) {
-        fs.readFile("credentials/db-creds.json", "utf8", (err, res) => {
-            if (err) {
-                throw err;
-            }
-            instance.connInfo = JSON.parse(res);
-            cb();
-        });
-    } else {
-        cb();
-    }
+    return new Promise((resolve, reject) => {
+        if (!instance.connInfo) {
+            fs.readFile("credentials/db-creds.json", "utf8", (err, res) => {
+                if (err) {
+                    reject(err);
+                }
+                instance.connInfo = JSON.parse(res);
+                resolve();
+            });
+        } else {
+            resolve();
+        }
+    });
 }
 
 module.exports = DBConnection;

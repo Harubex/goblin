@@ -5,8 +5,6 @@ const express = require("express");
 const debug = require("debug")("server");
 const helmet = require("helmet");
 const compression = require("compression");
-const mysql = require("mysql");
-const uuid = require("uuid/v4");
 const session = require("express-session");
 const DynamoStore = require("connect-dynamodb")({session: session});
 
@@ -41,7 +39,7 @@ app.use(session({
         table: "UserSessions",
         AWSConfigPath: "./credentials/dynamo-creds.json"
     }),
-    genid: uuid,
+    genid: require("uuid/v4"),
     secure: cookieSecure,
     resave: false,
     saveUninitialized: false

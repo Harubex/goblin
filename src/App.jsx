@@ -6,7 +6,6 @@ import Collection from "./Collection";
 import Cards from "./Cards";
 import ImportExport from "./ImportExport";
 import CredentialForm from "./CredentialForm";
-import Dialog from "./Dialog";
 import HeaderBar from "./components/HeaderBar";
 import { Switch, Route } from "react-router-dom";
 
@@ -30,7 +29,6 @@ export default class App extends React.Component {
             <div>
                 <HeaderBar session={this.props.session} />
                 <Switch>
-                    <Route path="/quests" render={() => <Dialog context={this.props.context} />} />
                     <Route path="/user/login" render={() => <CredentialForm formType="login" context={this.props.context} />} />
                     <Route path="/user/register" render={() => <CredentialForm formType="register" context={this.props.context} />} />
                     <Route path="/card/:set/:code" render={() => <CardProfile context={this.props.context} />} />

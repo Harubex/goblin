@@ -1,12 +1,13 @@
 const debug = require("debug")("server/user");
 const express = require("express");
 const bcrypt = require("bcrypt");
+const squel = require("squel");
 const DBConnection = require("../data/db-conn");
 const send = require("./static-router");
-const squel = require("squel");
 
 const router = express.Router();
 const conn = new DBConnection();
+const saltRounds = 13; // Used for password encryption. 13 is a decent middle ground.
 
 router.get("/login", send);
 router.get("/register", send);
@@ -20,79 +21,69 @@ router.get("/logout", (req, resp) => {
     });
 });
 
-router.post("/login", (req, resp) => {
-    const body = req.body || {};
-    if (!body.username) {
-        sendError(req, resp, "A username is required.");
-    } else if (!body.password) {
-        sendError(req, resp, "A password is required.");
-    } else if (body.username.length > 64) {
-        sendError(req, resp, "The given username is too long.");
-    } else {
-        conn.query(squel.select().from("users").where("name = ?", body.username), (err, data) => {
-            if (err) {
-                sendError(req, resp, err.message);
-            } else if (data.length == 0) {
-                sendError(req, resp, "No user with this name exists.");
-            } else {
-                bcrypt.compare(body.password, data[0].password, (err, passwordValid) => {
-                    if (err) {
-                        debug("Password comparison failed.");
-                    } else if (!passwordValid) {
-                        sendError(req, resp, "The given password is invalid.");
-                    } else {
-                        addSessionData(req, {
-                            userid: data[0].id,
-                            username: body.username
-                        }, () => resp.redirect("/collections"));
-                    }
-                });
-            }
+router.post("/login", async (req, resp) => {
+    try { 
+        const body = req.body || {};
+        if (!body.username) {
+            throw new Error("A username is required.");
+        }
+        if (!body.password) {
+            throw new Error("A password is required.");
+        }
+        if (body.username.length > 64) {
+            throw new Error("The given username is too long.");
+        }
+        const data = await conn.query(squel.select().from("users").where("name = ?", body.username));
+        if (data.length == 0) {
+            throw new Error("No user with this name exists.");
+        }
+        const valid = await bcrypt.compare(body.password, data[0].password);
+        if (!passwordValid) {
+            throw new Error("The given password is invalid.");
+        }
+        await addSessionData(req, {
+            userid: data[0].id,
+            username: body.username
         });
+        resp.redirect("/collections");
+    } catch (err) {
+        sendError(req, resp, err.message);
     }
 });
 
-router.post("/register", (req, resp) => {
-    const body = req.body || {};
-    if (!body.confirm || body.password != body.confirm) {
-        sendError(req, resp, "The provided passwords don't match.");
-    } else if (!body.username) {
-        sendError(req, resp, "A username is required.");
-    } else if (!body.password) {
-        sendError(req, resp, "A password is required.");
-    } else if (body.username.length > 64) {
-        sendError(req, resp, "The given username is too long.");
-    } else {
-        conn.query(squel.select().from("users").field("count(*)", "userCount").where("name = ?", body.username), (err, res) => {
-            if (err) {
-                sendError(req, resp, err.message);
-            } else if (res[0].userCount > 0) {
-                sendError(req, resp, "A user with this name already exists.");
-            } else {
-                bcrypt.hash(body.password, 13, (err, hash) => {
-                    if (err) {
-                        sendError(req, resp, err.message);
-                    } else {
-                        var a = squel.insert().into("users").setFields({
-                            name: body.username,
-                            password: hash
-                        });
-                        var b = squel.select().from("users").where("name = ?", body.username).toParam();
-                        conn.query("insert into users (name, password) values (?, ?); select * from users where name = ?;", 
-                        [body.username, hash, body.username], (err, data) => {
-                            if (err) {
-                                sendError(req, resp, err.message);
-                            } else {
-                                addSessionData(req, {
-                                    userid: data[1][0].id,
-                                    username: body.username
-                                }, () => resp.redirect("/collections"));
-                            }
-                        });
-                    }
-                });
-            }
+router.post("/register", async (req, resp) => {
+    try {
+        const body = req.body || {};
+        if (!body.confirm || body.password != body.confirm) {
+            throw new Error("The provided passwords don't match.");
+        }
+        if (!body.username) {
+            throw new Error("A username is required.");
+        }
+        if (!body.password) {
+            throw new Error("A password is required.");
+        }
+        if (body.username.length > 64) {
+            throw new Error("The given username is too long.");
+        }
+        const res = await conn.query(squel.select().from("users").field("count(*)", "userCount").where("name = ?", body.username));
+        if (res[0].userCount > 0) {
+            throw new Error("A user with this name already exists.");
+        }
+        const data = await conn.query([
+            squel.insert().into("users").setFields({
+                name: body.username,
+                password: await bcrypt.hash(body.password, saltRounds)
+            }),
+            squel.select().from("users").where("name = ?", body.username)
+        ]);
+        await addSessionData(req, {
+            userid: data[1][0].id,
+            username: body.username
         });
+        resp.redirect("/collections");
+    } catch (err) {
+        sendError(req, resp, err.message);
     }
 });
 
@@ -102,16 +93,24 @@ function sendError(req, resp, error) {
     });
 }
 
-function addSessionData(req, data, cb) {
+/**
+ * Adds the properties of an object to the current session.
+ * @param {Request} req 
+ * @param {Object} data 
+ * @returns {Promise<void>}
+ */
+async function addSessionData(req, data) {
     for (let key in data) {
         req.session[key] = data[key];
     }
-    req.session.save((err) => {
-        if (err) {
-            debug(err);
-        } else {
-            cb();
-        }
+    return new Promise((resolve, reject) => {
+        req.session.save((err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
     });
 }
 
