@@ -1,8 +1,10 @@
+DROP TABLE IF EXISTS `collection_card`;
+DROP TABLE IF EXISTS `cards`;
+DROP TABLE IF EXISTS `collections`;
 DROP TABLE IF EXISTS `mtgjson_sets`;
 DROP TABLE IF EXISTS `mtgjson_cards`;
 DROP TABLE IF EXISTS `scryfall_sets`;
 DROP TABLE IF EXISTS `scryfall_cards`;
-DROP TABLE IF EXISTS `cards`;
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `mtgjson_cards` (
@@ -121,17 +123,22 @@ CREATE TABLE `scryfall_cards` (
 
 CREATE TABLE `scryfall_sets` (
   `code` varchar(8) NOT NULL,
+  `mtgo_code` varchar(8) NOT NULL,
   `parent_set_code` varchar(8) DEFAULT NULL,
+  `block` varchar(128) DEFAULT NULL,
+  `block_code` varchar(8) DEFAULT NULL,
   `name` varchar(128) DEFAULT NULL,
-  `uri` varchar(256) DEFAULT NULL,
-  `scryfall_uri` varchar(256) DEFAULT NULL,
-  `released_at` datetime DEFAULT NULL,
-  `set_type` varchar(16) DEFAULT NULL,
-  `card_count` int(11) DEFAULT NULL,
-  `icon_svg_uri` varchar(256) DEFAULT NULL,
+  `released_at` date DEFAULT NULL,
+  `set_type` varchar(16) NOT NULL,
+  `card_count` smallint(4) NOT NULL,
+  `digital` bit(1) not null,
+  `foil` bit(1) not null,
+  `uri` varchar(128) NOT NULL,
+  `scryfall_uri` varchar(128) NOT NULL,
+  `icon_svg_uri` varchar(128) NOT NULL,
+  `search_uri` varchar(128) NOT NULL,
   PRIMARY KEY (`code`),
-  KEY `code_idx` (`parent_set_code`),
-  CONSTRAINT `code` FOREIGN KEY (`parent_set_code`) REFERENCES `scryfall_sets` (`code`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `code_idx` (`parent_set_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `cards` (
@@ -150,4 +157,22 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `collections` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `user_id_idx` (`user_id`),
+  CONSTRAINT `id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `collection_card` (
+  `collection_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `normal_qty` int(11) NOT NULL DEFAULT '0',
+  `foil_qty` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`collection_id`,`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

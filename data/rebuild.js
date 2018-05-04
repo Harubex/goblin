@@ -41,13 +41,20 @@ function buildScryfallDB(cb = () => {}) {
                 sets.forEach((set) => {
                     let info = [
                         set.code,
+                        set.mtgo_code,
+                        set.parent_set_code,
+                        set.block,
+                        set.block_code,
                         set.name,
-                        set.uri,
-                        set.scryfall_uri,
                         set.released_at,
                         set.set_type,
                         set.card_count,
-                        set.icon_svg_uri
+                        set.digital,
+                        set.foil,
+                        set.uri,
+                        set.scryfall_uri,
+                        set.icon_svg_uri,
+                        set.search_uri
                     ];
                     for (let x = 0; x < info.length; x++) {
                         if (info[x] && typeof(info[x]) === "object") {
@@ -63,7 +70,7 @@ function buildScryfallDB(cb = () => {}) {
                         throw err;
                     }
                     console.log("sets added");
-                    conn.query("truncate scryfall_cards;", () => {
+                    /*conn.query("truncate scryfall_cards;", () => {
                         fs.readFile("./data/scryfall_cards_insert.sql", "utf8", (err, data) => {
                             if (err) {
                                 throw err;
@@ -76,7 +83,7 @@ function buildScryfallDB(cb = () => {}) {
                                 });
                             });
                         });
-                    });
+                    });*/
                 });
             });
         });
@@ -195,7 +202,7 @@ function rebuildTables() {
     fs.readFile("./data/rebuild.sql", "utf8", (err, tableQuery) => {
         fs.readFile("./data/collection_value_function.sql", "utf8", (err, functionQuery) => {
             conn.query(tableQuery, (err, data) => {
-                if (err) {
+                if (err) {console.log(err);
                     throw new Error(`Unable to create tables: ${err.message}.`);
                 } else {
                     console.log(functionQuery);
@@ -203,7 +210,7 @@ function rebuildTables() {
                         if (err) {
                             throw new Error(`Unable to create functions: ${err.message}.`);
                         } else {
-                            buildScryfallDB(buildMtgJsonDB);
+                            buildScryfallDB();
                         }
                     });
                 }
