@@ -4,7 +4,7 @@ const debug = require("debug")("server/api");
 const express = require("express");
 const scryfall = require("scryfall");
 const send = require("./static-router");
-const DBConnection = require("../data/db-conn");
+const { DBConnection } = require("../data/db-conn");
 const images = require("../data/images");
 
 const router = express.Router();

@@ -3,6 +3,12 @@ const path = require("path");
 const debug = require("debug")("test");
 const htmlPath = path.join(__dirname, "..", "src", "index.html");
 
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} resp 
+ * @param {any} data 
+ */
 module.exports = (req, resp, data) => {
     fs.readFile(htmlPath, "utf8", (err, fileData) => {
         if (err) {

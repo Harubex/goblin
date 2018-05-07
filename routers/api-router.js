@@ -1,6 +1,6 @@
 const debug = require("debug")("server/api");
 const express = require("express");
-const DBConnection = require("../data/db-conn");
+const { DBConnection } = require("../data/db-conn");
 
 const router = express.Router();
 const conn = new DBConnection();

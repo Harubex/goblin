@@ -1,8 +1,7 @@
 const debug = require("debug")("server/user");
 const express = require("express");
 const bcrypt = require("bcrypt");
-const squel = require("squel");
-const DBConnection = require("../data/db-conn");
+const { DBConnection, select, insert } = require("../data/db-conn");
 const send = require("./static-router");
 
 const router = express.Router();
@@ -33,7 +32,7 @@ router.post("/login", async (req, resp) => {
         if (body.username.length > 64) {
             throw new Error("The given username is too long.");
         }
-        const data = await conn.query(squel.select().from("users").where("name = ?", body.username));
+        const data = await conn.query(select("users").where("name = ?", body.username));
         if (data.length == 0) {
             throw new Error("No user with this name exists.");
         }
@@ -66,16 +65,16 @@ router.post("/register", async (req, resp) => {
         if (body.username.length > 64) {
             throw new Error("The given username is too long.");
         }
-        const res = await conn.query(squel.select().from("users").field("count(*)", "userCount").where("name = ?", body.username));
+        const res = await conn.query(select("users").field("count(*)", "userCount").where("name = ?", body.username));
         if (res[0].userCount > 0) {
             throw new Error("A user with this name already exists.");
         }
         const data = await conn.query([
-            squel.insert().into("users").setFields({
+            insert("users").setFields({
                 name: body.username,
                 password: await bcrypt.hash(body.password, saltRounds)
             }),
-            squel.select().from("users").where("name = ?", body.username)
+            select("users").where("name = ?", body.username)
         ]);
         await addSessionData(req, {
             userid: data[1][0].id,

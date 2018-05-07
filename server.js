@@ -11,6 +11,7 @@ const DynamoStore = require("connect-dynamodb")({session: session});
 const app = express();
 const port = 8000;
 
+
 if (process.env.rebuilding) {
     let rebuild = require("./data/rebuild");
     rebuild.buildScryfallDB();

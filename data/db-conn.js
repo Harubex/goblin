@@ -1,4 +1,5 @@
 const fs = require("fs");
+const AWS = require("aws-sdk");
 const mysql = require("mysql");
 const squel = require("squel");
 const isJSON = require("is-json");
@@ -91,4 +92,18 @@ function checkCreds(instance, cb = () => {}) {
     });
 }
 
-module.exports = DBConnection;
+/**
+ * @type {squel.CompleteQueryBuilderOptions}
+ */
+const squelSettings = {
+    
+}
+
+module.exports = {
+    DBConnection,
+    expr: squel.expr().or,
+    select: squel.select(squelSettings).from,
+    insert: squel.insert(squelSettings).into,
+    update: squel.update(squelSettings).table,
+    del: squel.delete(squelSettings).from
+};

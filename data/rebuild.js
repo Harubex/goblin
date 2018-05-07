@@ -1,5 +1,5 @@
 const fs = require("fs");
-const DBConnection = require("../data/db-conn");
+const { DBConnection } = require("../data/db-conn");
 const scryfall = require("scryfall");
 const JSONStream = require("JSONStream");
 const mysql = require("mysql");

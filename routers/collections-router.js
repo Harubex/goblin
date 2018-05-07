@@ -1,6 +1,6 @@
 const debug = require("debug")("server/collections");
 const express = require("express");
-const DBConnection = require("../data/db-conn");
+const { DBConnection, del, select } = require("../data/db-conn");
 const importFiles = require("../data/import");
 const send = require("./static-router");
 const scryfall = require("scryfall");
@@ -11,18 +11,21 @@ var upload = multer({storage});
 const router = express.Router();
 const conn = new DBConnection();
 
-router.get("/", (req, resp) => {
-    conn.query(`select c.id, c.name, count(cc.card_id) as size, collection_value(c.id) as total_value from collections c 
-        left join collection_card cc on cc.collection_id = c.id 
-        where c.user_id = ? group by c.id order by c.name`, [req.session.userid], (err, data) => {
-        if (err) {
-            debug("Unable to fetch collections for user", req.session);
-        }
+router.get("/", async (req, resp) => {
+    try {
+        const data = await conn.query(select("collections", "co").left_join("collection_card", "cc", "cc.collection_id = co.id").fields({
+            "co.id": "id",
+            "co.name": "name",
+            "count(cc.card_id)": "size",
+            "collection_value(co.id)": "total_value"
+        }).where("co.user_id = ?", req.session.userid).group("co.id").order("co.name", true));
         data.forEach((co) => {
             co.total_value = co.total_value || 0;
         });
         send(req, resp, data);
-    });
+    } catch (err) {
+        debug(`Unable to fetch collections for user ${req.session}: ${err.message}`);
+    }
 });
 
 router.get("/import", (req, resp) => {
@@ -55,18 +58,17 @@ router.post("/import", upload.any(), (req, resp) => {
 });
 
 router.delete("/:collectionId", (req, resp) => {
-    conn.query(`
-        delete from collection_card where collection_id = ?;
-        delete from collections where id = ?;
-    `, [req.params.collectionId, req.params.collectionId], (err, res) => {
-        if (err) {
-            debug(err);
-        } else {
-            resp.json({
-                message: `Collection (${req.params.collectionId}) deleted successfully.`
-            });
-        }
-    });
+    try {
+        /*await conn.query([
+            del("collection_card").where("collection_id = ?", req.params.collectionId),
+            del("collections").where("id = ?", req.params.collectionId)
+        ]);
+        resp.json({
+            message: `Collection (${req.params.collectionId}) deleted successfully.`
+        });*/
+    } catch (err) {
+        debug(err);
+    }
 });
 
 router.delete("/:collectionId/cards", (req, resp) => {

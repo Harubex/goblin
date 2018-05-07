@@ -1,21 +1,20 @@
 const csv = require("csv");
 const fs = require("fs");
 const path = require("path");
-const squel = require("squel");
 const debug = require("debug")("server/import");
+const { DBConnection, select, insert, expr } = require("./db-conn");
 
-const DBConnection = require("./db-conn");
 const conn = new DBConnection();
 
 module.exports = async (collectionId, files, cb) => {
     try {
         for (let i = 0; i < files.length; i++) {
             const importData = await parseCSV(files[i]);
-            const cardData = await conn.query(squel.select().from("cards", "c").left_join("scryfall_cards", "sc", "sc.id = c.scryfall_id").fields({
+            const cardData = await conn.query(select("cards", "c").left_join("scryfall_cards", "sc", "sc.id = c.scryfall_id").fields({
                 "c.id": "card_id",
                 "sc.name": "name",
                 "sc.set": "set"
-            }).where("sc.name in ? and sc.set in ?", reduce(importData, "Name"), reduce(importData, "Set")));
+            }).where(expr("sc.name in ?", reduce(importData, "Name")).and("sc.set in ?", reduce(importData, "Set"))));
             let insertData = {};
             importData.forEach((card) => {
                 let c = cardData.find((ele) => {
@@ -31,7 +30,7 @@ module.exports = async (collectionId, files, cb) => {
                 insertData[c["card_id"]][JSON.parse(card["Foil"].toLowerCase()) ? "foilQty" : "normalQty"] += parseInt(card["Qty"]);
             });
             
-            const data = await conn.query(squel.insert().into("collection_card").set({
+            const data = await conn.query(insert("collection_card").set({
                 collection_id: collectionId,
                 card_id: id,
                 normal_qty: insertData[id].normalQty,
