@@ -1,7 +1,7 @@
 const fs = require("fs");
 const AWS = require("aws-sdk");
 const mysql = require("mysql");
-const squel = require("squel");
+const squel = require("squel").useFlavour("mysql");
 const isJSON = require("is-json");
 
 class DBConnection {
@@ -99,11 +99,19 @@ const squelSettings = {
     
 }
 
+squel.registerValueHandler(Date, (date) => {
+    if (!isNaN(date.getTime())) {
+        return "'" + date.toISOString().slice(0, 19).replace("T", " ") + "'";
+    } else {
+        return "null";
+    }
+});
 module.exports = {
     DBConnection,
-    expr: squel.expr().or,
-    select: squel.select(squelSettings).from,
-    insert: squel.insert(squelSettings).into,
-    update: squel.update(squelSettings).table,
-    del: squel.delete(squelSettings).from
+    expr: (cond, val) => squel.expr().or(cond, val),
+    replace: (table) => squel.replace().into(table),
+    select: (table, alias) => squel.select(squelSettings).from(table, alias),
+    insert: (table) => squel.insert().into(table),
+    update: (table, alias) => squel.update().table(table, alias),
+    del: (table, alias) => squel.delete().from(table, alias)
 };

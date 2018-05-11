@@ -1,39 +1,36 @@
 const AWS = require("aws-sdk");
+const scryfall = require("scryfall");
 
-AWS.config.update(require("./credentials/dynamo-creds.json"));
+AWS.config.update(require("../credentials/dynamo-creds.json"));
 
-const dyn = new AWS.DynamoDB.DocumentClient();
+const dynamo = new AWS.DynamoDB.DocumentClient({
+    convertEmptyValues: true
+});
 
-writePage().then((onFulfilled, b) => {
-
-})
+let totalCards = 0;
+module.exports = async () => {
+    for (let i = 0; await writePage(i); i++);
+    console.log(`Cards imported. ${totalCards} total cards processed.`);
+};
 
 /**
- * @returns {Promise<AWS.DynamoDB.DocumentClient.BatchWriteItemOutput, AWS.AWSError>}
+ * @param {number} page
+ * @returns {Promise<boolean>}
  */
-async function writePage() {
-    return await dyn.batchWrite({
-        RequestItems: {
-            "CardData": [
-                
-            ]
-        }
-    }).promise();
+async function writePage(page) {
+    const cards = await scryfall.getAllCards(page);
+    console.log(`Page ${page}: ${cards.length} cards.`);
+    for (let i = 0; i < cards.length; i += 25) {
+        await dynamo.batchWrite({
+            RequestItems: {
+                "CardData": cards.slice(i, i + 25).map((card) => ({
+                    PutRequest: {
+                        Item: card
+                    }
+                }))
+            }
+        }).promise();
+    }
+    totalCards += cards.length;
+    return !!cards.length;
 }
-dyn.putItem({
-    TableName: "CardData",
-    Item: {
-        "id": {
-            S: "test12"
-        },
-        "name": {
-            S: "test22"
-        }
-    }
-}, function(err, data) {
-    if (err) {
-      console.log("Error", err);
-    } else {
-      console.log("Success", data);
-    }
-});

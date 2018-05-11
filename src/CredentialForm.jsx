@@ -55,7 +55,7 @@ class CredentialForm extends React.Component {
                         <TextField className={classes.textField} type="password" name="confirm" label="Confirm Password" 
                             fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
                     }
-                    <Button className={classes.inputButton} type="submit" raised dense color="primary">Login</Button>
+                    <Button className={classes.inputButton} type="submit" raised dense color="primary">{this.props.formType}</Button>
                 </form>
             </div>
         );

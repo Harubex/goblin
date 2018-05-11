@@ -24,7 +24,7 @@ router.get("/", async (req, resp) => {
         });
         send(req, resp, data);
     } catch (err) {
-        debug(`Unable to fetch collections for user ${req.session}: ${err.message}`);
+        debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
     }
 });
 

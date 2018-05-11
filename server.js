@@ -8,8 +8,11 @@ const compression = require("compression");
 const session = require("express-session");
 const DynamoStore = require("connect-dynamodb")({session: session});
 
+require("./data/mysql-import").writeSets();
+
 const app = express();
 const port = 8000;
+const start = new Date();
 
 
 if (process.env.rebuilding) {
@@ -62,4 +65,6 @@ if (process.env.NODE_ENV !== "production") {
         cert: fs.readFileSync(path.join(__dirname, "./credentials/test-cert.pem"))
     }, app);
 }
-server.listen(port);
+server.listen(port, () => {
+    debug(`Server started. Load time: ${(new Date() - start) / 1000} seconds.`);
+});
