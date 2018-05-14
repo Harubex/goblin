@@ -8,7 +8,7 @@ const compression = require("compression");
 const session = require("express-session");
 const DynamoStore = require("connect-dynamodb")({session: session});
 
-require("./data/mysql-import").writeSets();
+require("./data/mysql-import")();
 
 const app = express();
 const port = 8000;
@@ -48,6 +48,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+/*
 app.use("/card", require("./routers/card-router"));
 app.use("/user", require("./routers/user-router"));
 app.use("/api", require("./routers/api-router"));
@@ -56,7 +57,7 @@ app.use("/sets", require("./routers/set-router"));
 app.use(express.static("./build"));
 app.use(express.static("./static"));
 app.use(require("./middleware/404"));
-app.use(require("./middleware/error"));
+app.use(require("./middleware/error"));*/
 
 let server = app;
 if (process.env.NODE_ENV !== "production") {
