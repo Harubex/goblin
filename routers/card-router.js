@@ -6,53 +6,11 @@ const scryfall = require("scryfall")
 const send = require("./static-router");
 const { DBConnection } = require("../data/db-conn");
 const images = require("../data/images");
-const AWS = require("aws-sdk");
-const mongo = require("mongodb");
 
 const router = express.Router();
 const conn = new DBConnection();
 
-AWS.config.update(require("../credentials/dynamo-creds.json"));
-const dynamo = new AWS.DynamoDB.DocumentClient({
-    convertEmptyValues: true
-});
-
 let cache = [];
-
-router.get("/dynamo/set/:code", async (req, resp) => {
-    try {
-        const res = await dynamo.scan({
-            TableName: "CardData",
-            FilterExpression: "#set = :set_code",
-            ExpressionAttributeNames: {
-                "#set": "set"
-            },
-            ExpressionAttributeValues: {
-                ":set_code": req.params.code
-            },
-            IndexName: "set-index",
-            Select: "ALL_ATTRIBUTES"
-        }).promise();
-        resp.json(res.Items);
-    } catch (err) {
-        debug(err);
-    }
-});
-let mongoConn = null;
-
-router.get("/mongo/set/:code", async (req, resp) => {
-    try {
-        if (!mongoConn) {
-            mongoConn = await mongo.MongoClient.connect(require("../credentials/mongo-creds.json").uri);
-        }
-        const cards = await mongoConn.db("magical").collection("card_data").find({
-            set: req.params.code
-        }).toArray();
-        resp.json(cards);
-    } catch (err) {
-        debug(err);
-    }
-});
 
 router.get("/images/:set/:code", (req, resp) => {
     const staticPath = path.join(__dirname, `../static/cards/${req.params.set}/${req.params.code}`);

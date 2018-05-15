@@ -59,7 +59,7 @@ typings/
 
 build/
 credentials/dynamo-creds.json
-credentials/db-creds.json
+credentials/mysql-creds.json
 static/cards/
 package-lock.json
 yarn.lock

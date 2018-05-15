@@ -12,7 +12,11 @@ delete window.serverState;
 delete window.sessionState;
 
 ReactDOM.render((
-    <BrowserRouter>
-        <App context={serverState} session={sessionState} />
-    </BrowserRouter>
+    <>
+        <React.StrictMode>
+            <BrowserRouter>
+                <App context={serverState} session={sessionState} />
+            </BrowserRouter>
+        </React.StrictMode>
+    </>
 ), document.getElementById("base-container"));
