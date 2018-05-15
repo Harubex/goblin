@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import HomeIcon from "material-ui-icons/Home";
+import HomeIcon from "@material-ui/icons/Home";
 import {withStyles} from "material-ui/styles";
 import AppBar from "material-ui/AppBar";
 import Button from "material-ui/Button";

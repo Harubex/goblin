@@ -8,17 +8,14 @@ const compression = require("compression");
 const session = require("express-session");
 const DynamoStore = require("connect-dynamodb")({session: session});
 
-require("./data/mysql-import")();
-
 const app = express();
 const port = 8000;
 const start = new Date();
 
-
 if (process.env.rebuilding) {
-    let rebuild = require("./data/rebuild");
-    rebuild.buildScryfallDB();
-    rebuild.buildMtgJsonDB();
+    const rebuild = require("./data/mysql-import");
+    rebuild.writeSets();
+    rebuild.writeCards();
 }
 
 app.set("title", "Goblin Guide");
@@ -48,16 +45,16 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-/*
+
 app.use("/card", require("./routers/card-router"));
 app.use("/user", require("./routers/user-router"));
-app.use("/api", require("./routers/api-router"));
+//app.use("/api", require("./routers/api-router"));
 app.use("/collections", require("./routers/collections-router"));
-app.use("/sets", require("./routers/set-router"));
+//app.use("/sets", require("./routers/set-router"));
 app.use(express.static("./build"));
 app.use(express.static("./static"));
 app.use(require("./middleware/404"));
-app.use(require("./middleware/error"));*/
+app.use(require("./middleware/error"));
 
 let server = app;
 if (process.env.NODE_ENV !== "production") {

@@ -1,7 +1,6 @@
 const debug = require("debug")("server/collections");
 const express = require("express");
-const { DBConnection, del, select } = require("../data/db-conn");
-const importFiles = require("../data/import");
+const { knex } = require("../data/db-conn");
 const send = require("./static-router");
 const scryfall = require("scryfall");
 var multer = require("multer");
@@ -9,20 +8,16 @@ const storage = multer.memoryStorage();
 var upload = multer({storage});
 
 const router = express.Router();
-const conn = new DBConnection();
 
 router.get("/", async (req, resp) => {
-    try {
-        const data = await conn.query(select("collections", "co").left_join("collection_card", "cc", "cc.collection_id = co.id").fields({
-            "co.id": "id",
-            "co.name": "name",
-            "count(cc.card_id)": "size",
-            "collection_value(co.id)": "total_value"
-        }).where("co.user_id = ?", req.session.userid).group("co.id").order("co.name", true));
-        data.forEach((co) => {
-            co.total_value = co.total_value || 0;
-        });
-        send(req, resp, data);
+    try { 
+        send(req, resp, await knex.select({
+            id: "collections.id",
+            name: "collections.name",
+            size: knex.count("collection_card.card_id"),
+            value: knex.raw("collection_value(collections.id)")
+        }).from("collections").leftJoin("collection_card", "collection_card.collection_id", "collections.id")
+        .where("collections.id", req.query.collectionid).orderBy("collections.name"));
     } catch (err) {
         debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
     }

@@ -1,11 +1,10 @@
 const debug = require("debug")("server/user");
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { DBConnection, select, insert } = require("../data/db-conn");
+const { knex } = require("../data/db-conn");
 const send = require("./static-router");
 
 const router = express.Router();
-const conn = new DBConnection();
 const saltRounds = 13; // Used for password encryption. 13 is a decent middle ground.
 
 router.get("/login", send);
@@ -32,21 +31,22 @@ router.post("/login", async (req, resp) => {
         if (body.username.length > 64) {
             throw new Error("The given username is too long.");
         }
-        const data = await conn.query(select("users").where("name = ?", body.username));
-        if (data.length == 0) {
+        const user = await getUser(body.username);
+        if (user) {
             throw new Error("No user with this name exists.");
         }
-        const valid = await bcrypt.compare(body.password, data[0].password);
+        const valid = await bcrypt.compare(body.password, user.password);
         if (!passwordValid) {
             throw new Error("The given password is invalid.");
         }
         await addSessionData(req, {
-            userid: data[0].id,
+            userid: user.id,
             username: body.username
         });
         resp.redirect("/collections");
-    } catch (err) {
-        sendError(req, resp, err.message);
+    } catch (error) {
+        debug(error);
+        send(req, resp, { error });
     }
 });
 
@@ -65,31 +65,32 @@ router.post("/register", async (req, resp) => {
         if (body.username.length > 64) {
             throw new Error("The given username is too long.");
         }
-        const res = await conn.query(select("users").field("count(*)", "userCount").where("name = ?", body.username));
-        if (res[0].userCount > 0) {
+        const user = await getUser(body.username);
+        if (user) {
             throw new Error("A user with this name already exists.");
         }
-        const data = await conn.query([
-            insert("users").setFields({
-                name: body.username,
-                password: await bcrypt.hash(body.password, saltRounds)
-            }),
-            select("users").where("name = ?", body.username)
-        ]);
+        const userId = (await knex.insert({
+            name: body.username,
+            password: await bcrypt.hash(body.password, saltRounds)
+        }).into("users").returning("id")).pop();
+        debug(`User created with id ${userId}.`);
         await addSessionData(req, {
-            userid: data[1][0].id,
+            userid: userId,
             username: body.username
         });
         resp.redirect("/collections");
-    } catch (err) {
-        sendError(req, resp, err.message);
+    } catch (error) {
+        debug(error);
+        send(req, resp, { error });
     }
 });
 
-function sendError(req, resp, error) {
-    send(req, resp, {
-        error: error
-    });
+/**
+ * Gets a user, or undefined if one doesn't exist.
+ * @param {string} username 
+ */
+async function getUser(username) {
+    return await knex.select().first().from("users").where("name", username);
 }
 
 /**

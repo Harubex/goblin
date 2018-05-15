@@ -2,7 +2,7 @@ import React from "react";
 import {withStyles} from "material-ui/styles";
 import Button from "material-ui/Button";
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
-import AddIcon from "material-ui-icons/Add";
+import AddIcon from "@material-ui/icons/Add";
 
 class AddButton extends React.Component {
 
