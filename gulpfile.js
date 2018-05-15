@@ -10,7 +10,13 @@ const babel = require("gulp-babel");
 
 let destination = "build";
 
-gulp.task("build-client", ["build-server"], () => {
+
+gulp.task("build-server", async (done) => {
+    compileFiles();
+    done();
+});
+
+gulp.task("build-client", gulp.series("build-server", async (done) => {
     gulp.src("src/*.css").pipe(gulp.dest(destination));
     let bundler = browserify(Object.assign(watchify.args, {
         entries: "src/main.jsx",
@@ -24,11 +30,8 @@ gulp.task("build-client", ["build-server"], () => {
         let stream = bundler.bundle().on("error", console.error).pipe(source("bundle.js")).pipe(buffer());
         stream.pipe(gulp.dest(destination));
     }).emit("update");
-});
-
-gulp.task("build-server", () => {
-    compileFiles();
-});
+    done();
+}));
 
 gulp.task("lint", () => {
     return gulp.src(["**/*.js", "**/*.jsx", "!node_modules/**"])

@@ -32,18 +32,18 @@ router.post("/login", async (req, resp) => {
             throw new Error("The given username is too long.");
         }
         const user = await getUser(body.username);
-        if (user) {
+        if (!user) {
             throw new Error("No user with this name exists.");
         }
         const valid = await bcrypt.compare(body.password, user.password);
-        if (!passwordValid) {
+        if (!valid) {
             throw new Error("The given password is invalid.");
         }
         await addSessionData(req, {
             userid: user.id,
             username: body.username
         });
-        resp.redirect("/collections");
+        resp.json(req.session);
     } catch (error) {
         debug(error);
         send(req, resp, { error });
@@ -78,7 +78,7 @@ router.post("/register", async (req, resp) => {
             userid: userId,
             username: body.username
         });
-        resp.redirect("/collections");
+        resp.json(req.session);
     } catch (error) {
         debug(error);
         send(req, resp, { error });

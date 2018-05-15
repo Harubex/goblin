@@ -6,7 +6,8 @@ const debug = require("debug")("server");
 const helmet = require("helmet");
 const compression = require("compression");
 const session = require("express-session");
-const DynamoStore = require("connect-dynamodb")({session: session});
+var MySQLStore = require("express-mysql-session")(session);
+
 
 const app = express();
 const port = 8000;
@@ -33,13 +34,21 @@ app.use(express.urlencoded({
 app.use(express.json({
     strict: false
 }));
+
 app.use(session({
+    cookie: {
+        // Set cookie to expire in about a week.
+        expires: (() => {
+            const date = new Date();
+            date.setDate(date.getDate() + 7);
+            return date;
+        })(),
+        httpOnly: false,
+
+    },
     secret: "sampletext123",
     name: "goblin-cookie",
-    store: new DynamoStore({
-        table: "UserSessions",
-        AWSConfigPath: "./credentials/dynamo-creds.json"
-    }),
+    store: new MySQLStore(require("./credentials/mysql-creds.json")),
     genid: require("uuid/v4"),
     secure: cookieSecure,
     resave: false,

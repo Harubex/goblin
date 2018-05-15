@@ -23,6 +23,21 @@ router.get("/", async (req, resp) => {
     }
 });
 
+router.post("/:collection_id", async (req, resp) => {
+    try {
+        if (!req.body || !req.body.length) {
+            throw new Error("Invalid body passed to collection.");
+        }
+        const body = Array.isArray(req.body) ? req.body : [req.body];
+        const session = req.session;
+    } catch (err) {
+        debug(err);
+        resp.json({
+            error: err.message
+        });
+    }
+});
+
 router.get("/import", (req, resp) => {
     conn.query(`select c.id, c.name, count(cc.card_id) as size from collections c 
         left join collection_card cc on cc.collection_id = c.id 
