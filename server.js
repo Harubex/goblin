@@ -8,7 +8,6 @@ const compression = require("compression");
 const session = require("express-session");
 var MySQLStore = require("express-mysql-session")(session);
 
-
 const app = express();
 const port = 8000;
 const start = new Date();

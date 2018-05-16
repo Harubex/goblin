@@ -25,11 +25,29 @@ router.get("/", async (req, resp) => {
 
 router.post("/:collection_id", async (req, resp) => {
     try {
-        if (!req.body || !req.body.length) {
+        if (!req.body) {
             throw new Error("Invalid body passed to collection.");
         }
-        const body = Array.isArray(req.body) ? req.body : [req.body];
-        const session = req.session;
+        const body = (Array.isArray(req.body) ? req.body : [req.body]).map((card) => {
+            if (!card.scryfall_id) {
+                throw new Error("One or more collection entries is missing a card id.");
+            }
+            if (!card.collection_id) {
+                throw new Error("One or more collection entries is missing a collection id.");
+            }
+            return {
+                collection_id: card.collection_id,
+                scryfall_id: card.scryfall_id,
+                normal: card.normal || 0,
+                foil: card.foil || 0
+            };
+        });
+        const session = req.session; // check for this at some point.
+        const query = knex("collection_card").insert(body).toSQL();
+        const res = knex.raw(query.sql + ` on duplicate key update ${
+            ["foil", "normal"].map((t) => ` ${t} = greatest(${t} + values(${t}), 0)`).join(", ")
+        }`, query.bindings);
+        resp.send(await res);
     } catch (err) {
         debug(err);
         resp.json({
