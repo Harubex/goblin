@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid/v4";
-import {withStyles} from "material-ui/styles";
-import TextField from "material-ui/TextField";
-import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from "material-ui/Dialog";
-import Button from "material-ui/Button";
+import {withStyles} from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Dialog, {DialogTitle, DialogContent, DialogActions, DialogContentText} from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
 import CollectionCard from "./components/CollectionCard";
 import AddButton from "./components/AddButton";
 import DialogButton from "./components/generic/DialogButton";

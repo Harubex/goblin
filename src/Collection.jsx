@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid/v4";
-import { withStyles } from "material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import CollectionPanel from "./components/CollectionPanel";
-import Switch from "material-ui/Switch";
+import Switch from "@material-ui/core/Switch";
 
 class Collection extends React.Component {
     constructor(props) {

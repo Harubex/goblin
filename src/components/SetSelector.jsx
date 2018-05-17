@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withStyles} from "material-ui/styles";
-import List, {ListItem, ListItemText, ListItemIcon} from "material-ui/List";
-import { SvgIcon } from "material-ui/SvgIcon";
+import {withStyles} from "@material-ui/core/styles";
+import List, {ListItem, ListItemText, ListItemIcon} from "@material-ui/core/List";
+import { SvgIcon } from "@material-ui/core/SvgIcon";
 import SetSymbol from "./SetSymbol";
 
 class SetSelector extends React.Component { 

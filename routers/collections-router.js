@@ -10,16 +10,19 @@ var upload = multer({storage});
 const router = express.Router();
 
 router.get("/", async (req, resp) => {
-    try { 
-        send(req, resp, await knex.select({
-            id: "collections.id",
-            name: "collections.name",
-            size: knex.count("collection_card.card_id"),
-            value: knex.raw("collection_value(collections.id)")
-        }).from("collections").leftJoin("collection_card", "collection_card.collection_id", "collections.id")
-        .where("collections.id", req.query.collectionid).orderBy("collections.name"));
-    } catch (err) {
-        debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
+    if (!req.session.userid) {
+        resp.status(302).redirect("/user/login");
+    } else {
+        try { 
+            send(req, resp, await knex.select({
+                id: "collections.id",
+                name: "collections.name",
+                size: knex.raw("total_cards(collections.id)"),
+                value: knex.raw("collection_value(collections.id)")
+            }).from("collections").where("users.id", req.session.userid).orderBy("collections.name"));
+        } catch (err) {
+            debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
+        }
     }
 });
 

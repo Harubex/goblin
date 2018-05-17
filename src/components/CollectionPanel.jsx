@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid/v4";
-import { withStyles } from "material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import SetCard from "./SetCard";
 
 class CollectionPanel extends React.Component {

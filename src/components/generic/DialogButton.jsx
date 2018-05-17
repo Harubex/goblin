@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withStyles} from "material-ui/styles";
-import Button from "material-ui/Button";
-import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
+import {withStyles} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core/Dialog";
 import AddIcon from "@material-ui/icons/Add";
-import SvgIcon from "material-ui/SvgIcon";
+import SvgIcon from "@material-ui/core/SvgIcon";
 
 let styles = {
     button: {

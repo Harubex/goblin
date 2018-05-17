@@ -1,9 +1,9 @@
 import React from "react";
-import {withStyles} from "material-ui/styles";
-import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
-import TextField from "material-ui/TextField";
-import Input from "material-ui/Input";
-import Button from "material-ui/Button";
+import {withStyles} from "@material-ui/core/styles";
+import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
+import Input from "@material-ui/core/Input";
+import Button from "@material-ui/core/Button";
 
 class CredentialForm extends React.Component {
 

@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid/v4";
-import { withStyles } from "material-ui/styles";
-import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
-import TextField from "material-ui/TextField";
+import { withStyles } from "@material-ui/core/styles";
+import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
 import SetCard from "./components/SetCard";
-import Select from "material-ui/Select";
-import Button from "material-ui/Button";
+import Select from "@material-ui/core/Select";
+import Button from "@material-ui/core/Button";
 
 class ImportExport extends React.Component {
     constructor(props) {

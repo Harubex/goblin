@@ -1,17 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "material-ui/styles";
-import Dialog, { DialogActions, DialogContent, DialogTitle } from "material-ui/Dialog";
-import Card, { CardHeader, CardActions, CardContent } from "material-ui/Card";
-import Button from "material-ui/Button";
-import IconButton from "material-ui/IconButton";
-import Typography from "material-ui/Typography";
+import { withStyles } from "@material-ui/core/styles";
+import Dialog, { DialogActions, DialogContent, DialogTitle } from "@material-ui/core/Dialog";
+import Card, { CardHeader, CardActions, CardContent } from "@material-ui/core/Card";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
 import ModeEditIcon from "@material-ui/icons/ModeEdit";
 import AddIcon from "@material-ui/icons/Add";
 import LayersClearIcon from "@material-ui/icons/LayersClear";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Tooltip from "material-ui/Tooltip";
+import Tooltip from "@material-ui/core/Tooltip";
 import AddCardDialog from "./AddCardDialog";
 import fetch from "../utils/fetch";
 

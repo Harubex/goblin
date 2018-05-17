@@ -1,9 +1,9 @@
 import React from "react";
 import uuid from "uuid/v4";
-import {withStyles} from "material-ui/styles";
-import Button from "material-ui/Button";
-import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "material-ui/Dialog";
-import TextField from "material-ui/TextField";
+import {withStyles} from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
 import AutoCard from "./AutoCard";
 import fetch from "../utils/fetch";
 
