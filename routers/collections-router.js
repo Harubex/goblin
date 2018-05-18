@@ -13,13 +13,16 @@ router.get("/", async (req, resp) => {
     if (!req.session.userid) {
         resp.status(302).redirect("/user/login");
     } else {
-        try { 
+        try {
             send(req, resp, await knex.select({
                 id: "collections.id",
                 name: "collections.name",
                 size: knex.raw("total_cards(collections.id)"),
                 value: knex.raw("collection_value(collections.id)")
-            }).from("collections").where("users.id", req.session.userid).orderBy("collections.name"));
+            }).from("collections")
+                .leftJoin("users", "users.id", "collections.user_id")
+                .where("users.id", req.session.userid)
+                .orderBy("collections.name"));
         } catch (err) {
             debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
         }
@@ -31,12 +34,16 @@ router.post("/:collection_id", async (req, resp) => {
         if (!req.body) {
             throw new Error("Invalid body passed to collection.");
         }
+        const collectionIds = await authenticatedCollections(req);
         const body = (Array.isArray(req.body) ? req.body : [req.body]).map((card) => {
             if (!card.scryfall_id) {
                 throw new Error("One or more collection entries is missing a card id.");
             }
             if (!card.collection_id) {
                 throw new Error("One or more collection entries is missing a collection id.");
+            }
+            if (collectionIds.indexOf(card.collection_id) < 0) {
+                throw new Error(`Collection (${card.collection_id}) cannot be changed by user (${req.session.userid}).`);
             }
             return {
                 collection_id: card.collection_id,
@@ -47,10 +54,9 @@ router.post("/:collection_id", async (req, resp) => {
         });
         const session = req.session; // check for this at some point.
         const query = knex("collection_card").insert(body).toSQL();
-        const res = knex.raw(query.sql + ` on duplicate key update ${
+        resp.send(await knex.raw(query.sql + ` on duplicate key update ${
             ["foil", "normal"].map((t) => ` ${t} = greatest(${t} + values(${t}), 0)`).join(", ")
-        }`, query.bindings);
-        resp.send(await res);
+        }`, query.bindings));
     } catch (err) {
         debug(err);
         resp.json({
@@ -217,6 +223,18 @@ function addCardToSet(sets, cardData) {
         }
         sets[cardData.set].cards.push(cardData);
     }
+}
+
+/**
+ * 
+ * @param {*} req 
+ * @returns {number[]}
+ */
+async function authenticatedCollections(req) {
+    const res = await knex.select("collections.id").from("sessions")
+        .leftJoin("collections", "collections.user_id", knex.raw("json_extract(sessions.data, '$.userid')"))
+        .where("sessions.session_id", req.sessionID);
+    return res.map((ele) => ele.id);
 }
 
 module.exports = router;
