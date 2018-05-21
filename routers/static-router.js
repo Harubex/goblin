@@ -1,40 +1,26 @@
 const fs = require("fs");
 const path = require("path");
-const debug = require("debug")("test");
+const util = require("util");
+const debug = require("debug")("server/static");
 const htmlPath = path.join(__dirname, "..", "src", "index.html");
+const readFile = util.promisify(fs.readFile);
 
+let pageCache = "";
 /**
  * 
  * @param {Request} req 
  * @param {Response} resp 
  * @param {any} data 
  */
-module.exports = (req, resp, data) => {
-    fs.readFile(htmlPath, "utf8", (err, fileData) => {
-        if (err) {
-            debug("Unable to fetch html.");
+module.exports = async (req, resp, data) => {
+    if (!pageCache) {
+        try {
+            pageCache = await readFile(htmlPath, "utf8");
+        } catch (err) {
+            debug("Unable to fetch index.html: ", err);
             resp.status(500).send(err.message);
-        } else if (data == null) {
-            resp.status(404).send("Could not fetch data.");
-        } else {
-            req.session.reload((err) => {
-                if (err) {
-                    debug(err);
-                    req.session.regenerate((err) => {
-                        if (err) {
-                            debug(err);
-                        }
-                        sendData(resp, fileData, data, req.session);
-                    });
-                } else {
-                    sendData(resp, fileData, data, req.session);
-                }
-            })
         }
-    });
-}
-
-function sendData(resp, fileData, serverState, sessionState) {
+    }
     fileData = fileData.replace("{state}", JSON.stringify(serverState || {}));
     fileData = fileData.replace("{session}", JSON.stringify(sessionState || {}));
     resp.send(fileData);

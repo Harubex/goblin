@@ -6,7 +6,5 @@ const knex = require("knex")({
 });
 
 module.exports = {
-    knex,
-    select: knex.select,
-    insert: knex.insert
+    knex
 };

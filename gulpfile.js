@@ -20,7 +20,7 @@ gulp.task("build-client", ["build-server"], () => {
     let bundler = browserify(Object.assign(watchify.args, {
         entries: "src/main.jsx",
         extensions: [".jsx", ".js"], 
-        debug: true
+        debug: false
     }));
     bundler = watchify(bundler);
     bundler.transform(babelify);

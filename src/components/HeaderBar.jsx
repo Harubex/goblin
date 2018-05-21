@@ -7,7 +7,8 @@ import Button from "@material-ui/core/Button";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import Menu, {MenuItem} from "@material-ui/core/Menu";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import AutoCard from "./AutoCard";
 
 class HeaderBar extends React.Component { 
@@ -34,7 +35,7 @@ class HeaderBar extends React.Component {
 
               
     render() {
-        const classes = this.props.classes;
+        const { classes } = this.props;
         const session = this.props.session || {};
         return (
             <div className={classes.root}>
@@ -64,22 +65,22 @@ class HeaderBar extends React.Component {
                                         vertical: "top",
                                         horizontal: "left"
                                     }} onClose={() => this.closeMenu(this)}>
-                                        <MenuItem onClick={this.handleRequestClose}>
+                                        <MenuItem>
                                             <a className={classes.menuLink} href="/account">
                                                 Account
                                             </a>
                                         </MenuItem>
-                                        <MenuItem onClick={this.handleRequestClose}>
+                                        <MenuItem>
                                             <a className={classes.menuLink} href="/settings">
                                                 Settings
                                             </a>
                                         </MenuItem>
-                                        <MenuItem onClick={this.handleRequestClose}>
+                                        <MenuItem>
                                             <a className={classes.menuLink} href="/collections/import">
                                                 Import/Export
                                             </a>
                                         </MenuItem>
-                                        <MenuItem onClick={this.handleRequestClose}>
+                                        <MenuItem>
                                             <a className={classes.menuLink} href="/user/logout">
                                                 Logout
                                             </a>
@@ -110,8 +111,12 @@ HeaderBar.propTypes = {
 
 export default withStyles((theme) => ({
     root: {
+        flexGrow: 1,
         width: "100%",
         paddingBottom: "1em",
+    },
+    flex: {
+        flex: 1
     },
     menuLink: {
         textDecoration: "none",
