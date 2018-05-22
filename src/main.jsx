@@ -1,13 +1,12 @@
 import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import App from "./App";
 const serverState = window.serverState;
 const sessionState = window.sessionState;
-
+ 
 delete window.serverState;
 delete window.sessionState;
 
@@ -30,12 +29,10 @@ const theme = createMuiTheme({
     }
 });
 ReactDOM.render((
-    <React.StrictMode>
+    <React.Fragment>
         <CssBaseline />
         <MuiThemeProvider theme={theme}>
-        <BrowserRouter>
             <App context={serverState} session={sessionState} />
-        </BrowserRouter>
         </MuiThemeProvider>
-    </React.StrictMode>
+    </React.Fragment>
 ), document.getElementById("base-container"));

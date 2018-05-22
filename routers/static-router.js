@@ -21,7 +21,7 @@ module.exports = async (req, resp, data) => {
             resp.status(500).send(err.message);
         }
     }
-    fileData = fileData.replace("{state}", JSON.stringify(serverState || {}));
-    fileData = fileData.replace("{session}", JSON.stringify(sessionState || {}));
-    resp.send(fileData);
+    pageCache = pageCache.replace("{state}", JSON.stringify(typeof (data) === "object" ? data : {}));
+    pageCache = pageCache.replace("{session}", JSON.stringify(req.session || {}));
+    resp.send(pageCache);
 }

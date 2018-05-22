@@ -33,30 +33,7 @@ class CredentialForm extends React.Component {
         const classes = this.props.classes;
         return (
             <div>
-                <Dialog title="Error" modal={false} open={this.state.dialogOpen} onClose={() => this.clearError(this)}>
-                    <DialogTitle>{`Unable to ${this.props.formType}`}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            {this.state.error}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => this.clearError(this)} color="primary">
-                            {"Okay"}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <form className={classes.container} method="post" action="">
-                    <TextField className={classes.textField} name="username" label="Username" autoFocus autoComplete="username"
-                    fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
-                    <TextField className={classes.textField} type="password" name="password" label="Password" autoComplete="current-password"
-                    fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
-                    {this.state.registerForm && 
-                        <TextField className={classes.textField} type="password" name="confirm" label="Confirm Password" 
-                            fullWidth={true} required onChange={(ev) => this.onInputChange(this, ev)} />
-                    }
-                    <Button className={classes.inputButton} type="submit" raised dense color="primary">{this.props.formType}</Button>
-                </form>
+                test
             </div>
         );
     }
