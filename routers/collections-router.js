@@ -14,7 +14,7 @@ router.get("/", async (req, resp) => {
         resp.status(302).redirect("/user/login");
     } else {
         try {
-            send(req, resp, await knex.select({
+            send(req, resp, "Collections", await knex.select({
                 id: "collections.id",
                 name: "collections.name",
                 size: knex.raw("total_cards(collections.id)"),

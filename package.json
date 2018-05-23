@@ -10,7 +10,11 @@
   "scripts": {
     "build": "webpack",
     "build-data": "node ./data/rebuild.js",
-    "build-images": "node ./data/images.js"
+    "build-images": "node ./data/images.js",
+    "test": "jest"
+  },
+  "jest": {
+    "testRegex": "./test/.*.js$"
   },
   "dependencies": {
     "@material-ui/core": "^1.0.0",
@@ -41,6 +45,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "scryfall": "^0.9.5",
+    "serialize-javascript": "^1.5.0",
     "supports-color": "^5.4.0",
     "uuid": "^3.2.1",
     "whatwg-fetch": "^2.0.4"
@@ -59,7 +64,9 @@
     "gulp-babel": "^7.0.1",
     "gulp-eslint": "^4.0.2",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^22.4.4",
     "style-loader": "^0.21.0",
+    "supertest": "^3.1.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^3.11.0",
