@@ -10,15 +10,6 @@ const saltRounds = 13; // Used for password encryption. 13 is a decent middle gr
 router.get("/login", send);
 router.get("/register", send);
 
-router.get("/logout", (req, resp) => {
-    req.session.destroy((err) => {
-        if (err) {
-            debug(err);
-        }
-        resp.redirect("back");
-    });
-});
-
 router.post("/login", async (req, resp) => {
     try { 
         const body = req.body || {};
@@ -50,7 +41,7 @@ router.post("/login", async (req, resp) => {
     }
 });
 
-router.post("/register", async (req, resp) => {
+router.post("/register", async (req, resp, next) => {
     try {
         const body = req.body || {};
         if (!body.confirm || body.password != body.confirm) {
@@ -82,7 +73,17 @@ router.post("/register", async (req, resp) => {
     } catch (error) {
         debug(error);
         send(req, resp, { error });
+        next(error);
     }
+});
+
+router.get("/logout", (req, resp) => {
+    req.session.destroy((err) => {
+        if (err) {
+            debug(err);
+        }
+        resp.redirect("back");
+    });
 });
 
 /**

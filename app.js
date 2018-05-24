@@ -1,6 +1,6 @@
 const helmet = require("helmet");
 const express = require("express");
-const compress = require("compression");
+const compression = require("compression");
 const session = require("express-session");
 var MySQLStore = require("express-mysql-session")(session);
 
@@ -13,16 +13,14 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(
-    // Middleware functions.
-    compress(),
-    helmet(),
-    express.urlencoded({
-        extended: false 
+    // Middleware functions - order matters.
+    compression(), // Compress responses (todo: add caching - https://serversforhackers.com/c/nginx-caching)
+    helmet(), // Changes default headers to something more reasonable.
+    express.urlencoded({ // Parses application/x-www-form-urlencoded responses.
+        extended: false // Prevents objects/arrays from being encoded.
     }),
-    express.json({
-        strict: false
-    }),
-    session({
+    express.json(), // Parses application/json responses.
+    session({ // Sets session store and other session options.
         cookie: {
             // Set cookie to expire in about a week.
             expires: (() => {
@@ -43,11 +41,12 @@ app.use(
     })
 );
 
-app.use("/card", require("./routers/card-router"));
+// Application routes.
+app.use("/collections", require("./routers/collections-router"));
+app.use("/cards", require("./routers/card-router"));
 app.use("/test", require("./routers/test-router"));
 app.use("/user", require("./routers/user-router"));
 //app.use("/api", require("./routers/api-router"));
-app.use("/collections", require("./routers/collections-router"));
 //app.use("/sets", require("./routers/set-router"));
 app.use(express.static("./build"));
 app.use(express.static("./static"));
