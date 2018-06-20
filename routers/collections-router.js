@@ -21,12 +21,58 @@ router.get("/", async (req, resp) => {
                 value: knex.raw("collection_value(collections.id)")
             }).from("collections")
                 .leftJoin("users", "users.id", "collections.user_id")
-                .where("users.id", req.session.userid)
-                .orderBy("collections.name"));
+            .where("users.id", req.session.userid)
+            .orderBy("collection.name"));
         } catch (err) {
             debug(`Unable to fetch collections for user ${req.session.userid}: ${err.message}`);
         }
     }
+});
+
+
+router.get("/:collectionId", async (req, resp) => {
+    try {
+        const collection = await knex.select({
+            number: "sc.collector_number",
+            setCode: "sc.set",
+            setName: "sc.set_name",
+            name: "sc.name",
+            normal: "cc.normal",
+            foil: "cc.foil"
+        }).from("collection_card as cc")
+            .leftJoin("scryfall.card as sc", "sc.id", "cc.scryfall_id")
+        .where("cc.collection_id", req.params.collectionId)
+        .groupBy("sc.set", "sc.collector_number");
+        if (collection) {
+            const sets = await knex("scryfall.set").orderBy("released_at", "desc");
+            debugger
+        }
+    } catch (err) {
+        debug(err);
+    }
+    
+   /* conn.query(`
+        select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
+            left join collection_card cc on cc.collection_id = co.id 
+            left join cards ca on ca.id = cc.card_id 
+            left join scryfall_cards sc on sc.id = ca.scryfall_id 
+            where co.id = ? group by sc.set, sc.collector_number
+    `, [req.params.collectionId], (err, res) => {
+        let ownedCards = {};
+        for (let i = 0; i < res.length; i++) {
+            addCardToSet(ownedCards, res[i]);
+        }
+        conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
+            send(req, resp, {
+                collectionId: req.params.collectionId,
+                ownedCards: ownedCards, 
+                sets: setData.map((set) => {
+                    set.visible = true;
+                    return set;
+                })
+            });
+        });
+    });*/
 });
 
 router.post("/:collection_id", async (req, resp) => {
@@ -122,30 +168,6 @@ router.delete("/:collectionId/cards", (req, resp) => {
     });
 });
 
-router.get("/:collectionId", (req, resp) => {
-    conn.query(`
-        select sc.collector_number, sc.set, sc.set_name, sc.name, cc.normal_qty, cc.foil_qty from collections co 
-            left join collection_card cc on cc.collection_id = co.id 
-            left join cards ca on ca.id = cc.card_id 
-            left join scryfall_cards sc on sc.id = ca.scryfall_id 
-            where co.id = ? group by sc.set, sc.collector_number
-    `, [req.params.collectionId], (err, res) => {
-        let ownedCards = {};
-        for (let i = 0; i < res.length; i++) {
-            addCardToSet(ownedCards, res[i]);
-        }
-        conn.query("select * from scryfall_sets order by released_at desc;", (err, setData) => {
-            send(req, resp, {
-                collectionId: req.params.collectionId,
-                ownedCards: ownedCards, 
-                sets: setData.map((set) => {
-                    set.visible = true;
-                    return set;
-                })
-            });
-        });
-    });
-});
 
 router.get("/:collectionId/:setCode", (req, resp) => {
     conn.query(`

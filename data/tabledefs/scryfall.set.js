@@ -1,8 +1,14 @@
-module.exports = async () => {
+const Knex = require("knex")();
+
+/**
+ * 
+ * @param {Knex} knex 
+ */
+module.exports = async (knex) => {
     const schema = knex.schema.withSchema("scryfall");
     const exists = await schema.hasTable("set");
     if (!exists) {
-        schema.createTable("set", (table) => {
+        const res = await schema.createTable("set", (table) => {
             table.comment("Set data from Scryfall.");
             table.charset("utf8mb4");
             table.engine("InnoDB");
@@ -21,6 +27,6 @@ module.exports = async () => {
             table.string("search_uri");
             table.string("scryfall_uri");
             table.specificType("object", "char(3)").notNullable();
-        }).then(console.log);
+        });
     }
 };
