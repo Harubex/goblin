@@ -33,6 +33,8 @@
     "knex": "^0.14.6",
     "multer": "^1.3.0",
     "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-autosuggest": "^9.3.4",

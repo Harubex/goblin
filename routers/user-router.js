@@ -4,10 +4,35 @@ const bcrypt = require("bcrypt");
 const { knex } = require("../data/db-conn");
 const send = require("./static-router");
 
+const passport = require("passport");
+const local = require("passport-local");
+
 const router = express.Router();
 const saltRounds = 13; // Used for password encryption. 13 is a decent middle ground.
 
-router.get("/login", send);
+passport.use(new local.Strategy(async (username, password, done) => {
+    try {
+        const user = await getUser(username);
+        if (!user) {
+            throw new Error("No user with this name exists.");
+        }
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) {
+            throw new Error("The given password is invalid.");
+        }
+        done(null, user);
+    } catch (error) {
+        debug(error);
+        done(error);
+    }
+}));
+
+router.use(passport.initialize());
+router.use(passport.session());
+
+router.get("/login", passport.authenticate("local"), async (req, resp) => {
+    resp.redirect("/");
+});
 router.get("/register", send);
 
 router.post("/login", async (req, resp) => {

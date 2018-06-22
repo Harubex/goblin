@@ -45,7 +45,7 @@ app.use(
 app.use("/collections", require("./routers/collections-router"));
 app.use("/cards", require("./routers/card-router"));
 app.use("/test", require("./routers/test-router"));
-app.use("/user", require("./routers/user-router"));
+app.use("/", require("./routers/user-router"));
 //app.use("/sets", require("./routers/set-router"));
 app.use(express.static("./build"));
 app.use(express.static("./static"));
