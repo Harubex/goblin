@@ -9,7 +9,7 @@ debug.disable("knex:bindings"); // Avoid log spam during import.
 /**
  * @type {ScryfallCard[]}
  */
-const cards = [];
+let cards = [];
 
 /**
  * Pages through all available cards and writes them to the DB.
@@ -78,6 +78,9 @@ async function writeSets() {
 
 async function writeRulings() {
     try {
+        if (cards.length === 0) {
+            cards = await knex("scryfall.card").select("id");
+        }
         for (const card of cards) {
             try {
                 const rulings = await scryfall.getRulings(card.id);
