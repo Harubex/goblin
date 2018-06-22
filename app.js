@@ -2,7 +2,9 @@ const helmet = require("helmet");
 const express = require("express");
 const compression = require("compression");
 const session = require("express-session");
-var MySQLStore = require("express-mysql-session")(session);
+const MySQLStore = require("express-mysql-session")(session);
+
+require("./data/import")
 
 const app = express();
 
