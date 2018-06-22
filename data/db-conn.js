@@ -1,7 +1,7 @@
 const fs = require("fs");
 const knex = require("knex")({
-    client: "mysql",
-    connection: require("../credentials/mysql-creds.json"),
+    client: "pg",
+    connection: require("../credentials/pg-creds.json"),
     debug: false
 });
 
