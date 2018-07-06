@@ -40,5 +40,6 @@
     "diffEditor.renderSideBySide": true,
     "debug.allowBreakpointsEverywhere": true,
     "debug.inlineValues": true,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "npm.packageManager": "yarn"
 }
