@@ -16,10 +16,10 @@ module.exports = class ScryfallCard extends ScryfallObject {
                 table.integer("mtgo_id").unsigned();
                 table.integer("mtgo_foil_id").unsigned();
                 table.integer("arena_id").unsigned();
-                table.string("uri", 256).notNullable();
-                table.string("scryfall_uri", 256).notNullable();
-                table.string("prints_search_uri", 256).notNullable();
-                table.string("rulings_uri", 256).notNullable();
+                table.string("uri", 512).notNullable();
+                table.string("scryfall_uri", 512).notNullable();
+                table.string("prints_search_uri", 512).notNullable();
+                table.string("rulings_uri", 512).notNullable();
                 table.string("name", 512).notNullable();
                 table.string("printed_name", 512);
                 table.string("lang", 8);
@@ -49,7 +49,7 @@ module.exports = class ScryfallCard extends ScryfallObject {
                 table.string("set", 8).notNullable();
                 table.string("set_name", 128).notNullable();
                 table.string("collector_number", 16).notNullable();
-                table.string("set_search_uri", 256).notNullable();
+                table.string("set_search_uri", 512).notNullable();
                 table.json("image_uris");
                 table.boolean("highres_image").notNullable();
                 table.boolean("reprint").notNullable();

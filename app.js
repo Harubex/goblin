@@ -4,8 +4,6 @@ const compression = require("compression");
 const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 
-require("./data/import")
-
 const app = express();
 
 let cookieSecure = false;

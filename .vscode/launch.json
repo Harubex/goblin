@@ -1,6 +1,13 @@
 {
 	"version": "0.2.0",
-	"configurations": [{
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Program",
+			"program": "${workspaceFolder}/app.js"
+		},
+		{
 		"name": "Launch",
 		"type": "node",
 		"protocol": "inspector",

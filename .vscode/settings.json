@@ -32,6 +32,7 @@
         "editor.detectIndentation": true,
         "editor.tabSize": 4
     },
+    "materialTheme.autoApplyIcons": true,
     "javascript.suggestionActions.enabled": false,
     "css.validate": true,
     "editor.detectIndentation": true,

@@ -6,6 +6,7 @@ import Collection from "./Collection";
 import Cards from "./Cards";
 import ImportExport from "./ImportExport";
 import CredentialForm from "./CredentialForm";
+import fetch from "./utils/fetch";
 import HeaderBar from "./components/navigation/HeaderBar";
 
 export default class App extends React.Component {
@@ -16,6 +17,10 @@ export default class App extends React.Component {
             currentUser: null
         };
     }
+    
+    async componentDidMount() {
+        await this.getMethods();
+    }
 
     onLogged(ctx, state) {
         ctx.setState({
@@ -23,10 +28,24 @@ export default class App extends React.Component {
         });
     }
 
+    /**
+     * @returns {any[]}
+     */
+    async getMethods() {
+        const resp = await fetch(`/test`, "get", (e, r) => {
+            this.setState({
+                methods: r
+            });
+        });
+    }
+
     render() {
         return (
             <div>
                 <HeaderBar session={this.props.session} title={"Sample Text"} username={"miorni"} />
+                <select>
+                    {(this.state.methods || []).map(val => <option>{val}</option>)}
+                </select>
             </div>
         );
     }

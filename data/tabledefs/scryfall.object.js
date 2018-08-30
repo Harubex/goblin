@@ -12,13 +12,11 @@ module.exports = class ScryfallObject {
 
     async buildTable() {
         try {
-            if (!await this.schema.hasTable("object")) {
-                await this.schema.raw("drop type if exists scryfall_object");
-                await this.schema.raw("create type scryfall_object as enum ('set', 'card', 'ruling')");
+            if (!this.schema.hasTable("object")) {
                 await this.schema.createTable("object", (table) => {
                     table.comment("Base table for Scryfall objects.");
-                    table.specificType("object", "scryfall_object").notNullable();
-                });   
+                    table.string("object", 16).notNullable();
+                });
             }
         } catch (err) {
             debug(err);
