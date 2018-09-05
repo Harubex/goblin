@@ -88,6 +88,7 @@ async function writeRulings() {
                     await knex("scryfall.ruling").insert(Object.assign({
                         card_id: card.id
                     }, ruling));
+                    console.log(`Added ${rulings.length} rulings.`);
                 }
             } catch (err) {
                 debugger;
@@ -100,11 +101,11 @@ async function writeRulings() {
 
 
 (async function () {
-    await new ScryfallSet(knex).buildTable();
-    await writeSets();
-    await new ScryfallCard(knex).buildTable();
-    await writeCards();
     await new ScryfallRuling(knex).buildTable();
     await writeRulings();
+    /*await new ScryfallSet(knex).buildTable();
+    await writeSets();
+    await new ScryfallCard(knex).buildTable();
+    await writeCards();*/
     process.exit();
 }());
